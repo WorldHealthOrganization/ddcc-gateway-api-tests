@@ -1,5 +1,5 @@
 <h1 align="center">
-   EU Digital COVID Certificate API Tests
+   DDCC Gateway  API Tests
 </h1>
 
 <p align="center">
