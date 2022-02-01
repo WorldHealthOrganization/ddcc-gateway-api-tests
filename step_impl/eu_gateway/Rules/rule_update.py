@@ -14,7 +14,7 @@
 # limitations under the License.
 # ---license-end
 from getgauge.python import data_store, step
-from step_impl.gateway.Rules.rule_upload import upload_rule
+from step_impl.eu_gateway.Rules.rule_upload import upload_rule
 from step_impl.util.certificates import get_own_country_name
 from os import path
 from step_impl.util import certificateFolder
