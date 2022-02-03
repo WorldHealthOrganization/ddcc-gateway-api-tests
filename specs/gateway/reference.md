@@ -11,7 +11,7 @@ CountryA creates a reference and uploads it.
 It must appear in the trustlist. 
 
 * "CountryA" creates a reference
-* "CountryA" creates CMS message with reference
+* "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
@@ -23,7 +23,7 @@ CountryA creates a reference and CountryB can download it.
 Another (simulated) gateway can also download the reference. 
 
 * "CountryA" creates a reference
-* "CountryA" creates CMS message with reference
+* "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
 * Secondary gateway downloads the reference trustlist
@@ -37,7 +37,7 @@ CountryA creates a reference and deletes it using
 the defaulte endpoint
 
 * "CountryA" creates a reference
-* "CountryA" creates CMS message with reference
+* "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
@@ -53,7 +53,7 @@ CountryA creates a reference and deletes it using
 the alternative endpoint (POST instead of DELETE)
 
 * "CountryA" creates a reference
-* "CountryA" creates CMS message with reference
+* "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
@@ -70,7 +70,7 @@ CountryB tries to delete a reference of CountryA.
 The operation must not succeed. 
 
 * "CountryA" creates a reference
-* "CountryA" creates CMS message with reference
+* "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
@@ -91,7 +91,7 @@ CountryB attempts to upload a reference of CountryA
 
 It must not appear in the trustlist. 
 * "CountryA" creates a reference
-* "CountryB" creates CMS message with reference
+* "CountryB" creates CMS message with trusted reference
 * "CountryB" uploads CMS reference
 * check that the response had an error
 * "CountryA" downloads the reference trustlist
@@ -104,7 +104,7 @@ and has access  to CountryA's upload keys
 
 It must not appear in the trustlist. 
 * "CountryA" creates a reference
-* "CountryA" creates CMS message with reference
+* "CountryA" creates CMS message with trusted reference
 * "CountryB" uploads CMS reference
 * check that the response had an error
 * "CountryA" downloads the reference trustlist

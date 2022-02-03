@@ -13,3 +13,8 @@ reports
 certificates/**/*.pem
 venv/*
 .venv/*
+
+# Environment variable definitions
+environment.sh
+environment.cmd 
+environment.ps1

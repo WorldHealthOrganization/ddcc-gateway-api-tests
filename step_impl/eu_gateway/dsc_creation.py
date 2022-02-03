@@ -23,8 +23,8 @@ from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from cryptography.x509 import Certificate
 from getgauge.python import data_store, step
-from step_impl.gateway.dsc_deletion import delete_dsc
-from step_impl.util import authCerts, baseurl, certificateFolder, FailedResponse
+from step_impl.eu_gateway.dsc_deletion import delete_dsc
+from step_impl.util import authCerts, eu_gateway_url, certificateFolder, FailedResponse
 from requests.exceptions import SSLError
 from step_impl.util.certificates import (create_certificate,
                                          create_cms_with_certificate,
@@ -90,7 +90,7 @@ def upload_public_key():
     signedDsc = data_store.scenario["signed_dsc"]
     headers = {"Content-Type": "application/cms",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.post(url=baseurl + "/signerCertificate", data=signedDsc, headers=headers, cert=(
+    response = requests.post(url=eu_gateway_url + "/signerCertificate", data=signedDsc, headers=headers, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
     # for cleanup later
@@ -121,7 +121,7 @@ def upload_unsigned_dsc():
     data = b64encode(dsc.public_bytes(serialization.Encoding.DER))
     headers = {"Content-Type": "application/cms",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.post(url=baseurl + "/signerCertificate", data=data, headers=headers, cert=(
+    response = requests.post(url=eu_gateway_url + "/signerCertificate", data=data, headers=headers, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 
@@ -134,7 +134,7 @@ def upload_dsc_with_custom_client_certificate():
     headers = {"Content-Type": "application/cms",
                "Content-Transfer-Encoding": "base64"}
     try:
-        response = requests.post(url=baseurl + "/signerCertificate",
+        response = requests.post(url=eu_gateway_url + "/signerCertificate",
                              data=signedDsc, headers=headers, cert=(cert_location, key_location))
     except SSLError:
         response = FailedResponse()

@@ -18,7 +18,7 @@ from os import path
 import requests
 from getgauge.python import data_store, step
 from requests import Response
-from step_impl.util import baseurl, certificateFolder, jreurl
+from step_impl.util import eu_gateway_url, certificateFolder, jrc_url
 from requests.exceptions import SSLError
 
 class FailedResponse:
@@ -29,7 +29,7 @@ class FailedResponse:
 
 @step("get all valuesets IDs")
 def get_all_valuesets():
-    response = requests.get(baseurl + f"/valuesets", cert=(
+    response = requests.get(eu_gateway_url + f"/valuesets", cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 
@@ -40,14 +40,14 @@ def get_all_valuesets_with_custom_certificate():
     key_location = path.join(certificateFolder, "custom_key_auth.pem")
 
     try:
-        response = requests.get(baseurl + f"/valuesets", cert=(
+        response = requests.get(eu_gateway_url + f"/valuesets", cert=(
             cert_location, key_location))
     except SSLError:
         response = FailedResponse()
     data_store.scenario["response"] = response
 
 def get_valueset_by_id(valuesetId):
-    return requests.get(baseurl + f"/valuesets/{valuesetId}", cert=(
+    return requests.get(eu_gateway_url + f"/valuesets/{valuesetId}", cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
 @step("get details of first Valueset in list")
 def get_details_of_first_valueset_in_list():
@@ -66,7 +66,7 @@ def get_all_valuesets():
 
 @step("get RAT Valuesets from JRC database")
 def get_rat_valuesets_from_jrc_database():
-    response = requests.get(jreurl)
+    response = requests.get(jrc_url)
     assert response.ok, "could not get Valueset from JRC database"
     data_store.scenario["response"] = response
     data_store.scenario["jre_valueset"] = response.json()

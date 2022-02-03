@@ -1,5 +1,5 @@
-from getgauge import step, data_store
-from util import testdata
+from getgauge.python import step, data_store
+from step_impl.util import testdata
 from uuid import uuid4
 import json
 
@@ -19,11 +19,11 @@ def creates_a_reference(country):
         'SignatureType' : 'CMS'
     }
 
-    data_store.scenario["trusted.reference"] = reference
+    data_store.scenario["trusted.reference.raw"] = reference
     return reference
 
 
-@step("<country> creates a trusted issuer certificate")
+@step("<country> creates a trusted issuer entry")
 def creates_a_trusted_issuer_certificate(country):
     trusted_issuer = {
         'URL' : 'https://does.not.exist/123', 
@@ -35,6 +35,6 @@ def creates_a_trusted_issuer_certificate(country):
         'KeyStorageType' : 'JWKS', # or DIDDocument, JKS, etc.
     }
 
-    data_store.scenario["trusted.issuer"] = trusted_issuer
+    data_store.scenario["trusted.issuer.raw"] = trusted_issuer
     return trusted_issuer
 

@@ -22,7 +22,7 @@ from cryptography.x509.oid import NameOID
 from getgauge.python import data_store, step
 from requests import Response
 from requests.exceptions import SSLError
-from step_impl.util import baseurl, certificateFolder, FailedResponse
+from step_impl.util import eu_gateway_url, certificateFolder, FailedResponse
 from step_impl.util.certificates import get_own_country_name
 from step_impl.util.rules import (download_rule_of_country,
                                   get_rules_from_rulelist)
@@ -30,7 +30,7 @@ from step_impl.util.rules import (download_rule_of_country,
 
 @step("get all onboarded countries")
 def get_all_onboarded_countries():
-    response = requests.get(baseurl + "/countrylist", cert=(
+    response = requests.get(eu_gateway_url + "/countrylist", cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 
@@ -40,7 +40,7 @@ def get_all_onboarded_countries_with_custom_certificate():
     cert_location = path.join(certificateFolder, "custom_auth.pem")
     key_location = path.join(certificateFolder, "custom_key_auth.pem")
     try:
-        response = requests.get(url=baseurl + "/countrylist",
+        response = requests.get(url=eu_gateway_url + "/countrylist",
                                 cert=(cert_location, key_location))
         data_store.scenario["response"] = response
     except SSLError:
@@ -81,7 +81,7 @@ def download_rules_of_all_countries_with_custom_certificate():
     countries = response.json()
     cert_location = path.join(certificateFolder, "custom_auth.pem")
     key_location = path.join(certificateFolder, "custom_key_auth.pem")
-    responses = [ do_requests(url=baseurl + f"/rules/{country}", cert=(
+    responses = [ do_requests(url=eu_gateway_url + f"/rules/{country}", cert=(
         cert_location, key_location)) for country in countries]
     data_store.scenario["responses"] = responses
 

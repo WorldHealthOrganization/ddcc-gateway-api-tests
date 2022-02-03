@@ -26,7 +26,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.x509.oid import NameOID
 from getgauge.python import data_store, step
 from requests.exceptions import SSLError
-from step_impl.util import baseurl, certificateFolder, FailedResponse
+from step_impl.util import eu_gateway_url, certificateFolder, FailedResponse
 from step_impl.util.certificates import create_cms
 from step_impl.util.json import DateTimeEncoder
 from step_impl.util.rules import (delete_rule_by_id_with_base_data,
@@ -66,7 +66,7 @@ def upload_rule(append_extra_data=False):
     key_location = path.join(certificateFolder, "key_auth.pem")
     headers = {"Content-Type": "application/cms-text",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.post(url=baseurl + "/rules",
+    response = requests.post(url=eu_gateway_url + "/rules",
                              data=data, headers=headers, cert=(cert_location, key_location))
     data_store.scenario["response"] = response
     # for cleanup later
@@ -81,7 +81,7 @@ def upload_rule_with_cms_header():
     key_location = path.join(certificateFolder, "key_auth.pem")
     headers = {"Content-Type": "application/cms",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.post(url=baseurl + "/rules",
+    response = requests.post(url=eu_gateway_url + "/rules",
                              data=data, headers=headers, cert=(cert_location, key_location))
     data_store.scenario["response"] = response
     # for cleanup later
@@ -97,7 +97,7 @@ def upload_rule_with_custom_authentication_certificate():
     headers = {"Content-Type": "application/cms-text",
                "Content-Transfer-Encoding": "base64"}
     try:
-        response = requests.post(url=baseurl + "/rules",
+        response = requests.post(url=eu_gateway_url + "/rules",
                              data=data, headers=headers, cert=(cert_location, key_location))
     except SSLError:
         response = FailedResponse()
@@ -113,7 +113,7 @@ def upload_rule_with_certificate_from_another_country():
         certificateFolder, "secondCountry", "key_auth.pem")
     headers = {"Content-Type": "application/cms-text",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.post(url=baseurl + "/rules",
+    response = requests.post(url=eu_gateway_url + "/rules",
                              data=data, headers=headers, cert=(cert_location, key_location))
     data_store.scenario["response"] = response
 

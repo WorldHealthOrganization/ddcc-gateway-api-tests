@@ -17,11 +17,16 @@
 from os import environ, getcwd, path
 from os.path import join
 
-baseurl = environ.get('baseurl')
+eu_gateway_url = environ.get('eu_gateway_url')
+jrc_url = environ.get('jrc_url')
+
+first_gateway_url = environ.get('first_gateway_url')
+second_gateway_url = environ.get('second_gateway_url')
+third_gateway_url = environ.get('third_gateway_url')
+
 certificateFolder = join(getcwd(), environ.get("certificatesFolder"))
 authCerts = (
     path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem"))
-jreurl = environ.get('jreurl')
 
 class FailedResponse:
     ok = False
