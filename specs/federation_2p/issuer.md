@@ -1,8 +1,8 @@
 # Trusted issuer handling 
 
-CountryA is authorized to use the primary gateway. 
-CountryC is authorized to use the secondary gateway. 
-The test cases cover the handling of references from their national backends
+CountryA is authorized to use the first gateway. 
+CountryC is authorized to use the second gateway. 
+The test cases cover the handling of issuer entries from their national backends
 
 
 

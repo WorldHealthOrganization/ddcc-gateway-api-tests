@@ -1,5 +1,8 @@
 # Meta data interface with 2 parties 
 
+CountryA is authorized to use the first gateway. 
+CountryC is authorized to use the second gateway. 
+
 ## Federated signatures can be download
 
 * "CountryA" downloads federated signatures
