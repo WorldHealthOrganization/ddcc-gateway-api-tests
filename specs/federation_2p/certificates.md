@@ -14,11 +14,11 @@ CountryC can download it from the secondary gateway
 
 * "CountryA" creates a certificate
 * "CountryA" creates CMS message with certificate
-* "CountryA" uploads CMS certificate
+* "CountryA" uploads CMS with certificate
 * check that the response had no error
 * "CountryA" downloads the certificate trustlist
 * check that the certificate is in the trustlist 
-* wait synchronization time
+* wait for 120 seconds
 * "CountryC" downloads the federated certificate trustlist
 * check that the certificate is in the trustlist 
 

@@ -17,7 +17,7 @@ CountryC can download it from the secondary gateway
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
 * check that the reference is in the trustlist 
-* wait synchronization time
+* wait for 120 seconds
 * "CountryC" downloads the federated reference trustlist
 * check that the reference is in the trustlist 
 

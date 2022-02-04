@@ -26,7 +26,7 @@ Another (simulated) gateway can also download the trusted issuer certificate.
 * "CountryA" creates CMS message with trusted issuer
 * "CountryA" uploads CMS with trusted issuer
 * check that the response had no error
-* Secondary gateway downloads the trusted issuer trustlist
+* Other gateway downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
 * "CountryB" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 

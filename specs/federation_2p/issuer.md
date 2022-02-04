@@ -17,7 +17,7 @@ CountryC can download it from the secondary gateway
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
-* wait synchronization time
+* wait for 120 seconds
 * "CountryC" downloads the federated issuer trustlist
 * check that the trusted issuer is in the trustlist 
 

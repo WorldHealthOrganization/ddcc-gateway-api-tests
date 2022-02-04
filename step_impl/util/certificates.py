@@ -71,7 +71,9 @@ def create_cms_with_certificate(dsc_cert: Certificate, upload_cert: Certificate,
 
 
 def create_cms(data: bytes, upload_cert: Certificate, upload_key: RSAPrivateKey):
-    'Create a CMS out of <data> using <upload_cert> and <upload_key>'
+    '''Create a CMS out of <data> using <upload_cert> and <upload_key>
+       Return the data in Base64 encoding
+    '''
 
     options = [pkcs7.PKCS7Options.Binary]
 
