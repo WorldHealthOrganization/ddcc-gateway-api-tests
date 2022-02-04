@@ -150,7 +150,7 @@ def _generic_upload_of_b64_data_by_country( url, data, country, delete=False ):
 @step("<country> uploads CMS with certificate")
 def uploads_cms_certificate(country):
     data=data_store.scenario['trusted.certificate.cms']
-    url = get_gateway_url_by_name('firstGateway') + '/trust/certificates'
+    url = get_gateway_url_by_name('firstGateway') + '/trust/certificate'
     response = _generic_upload_of_b64_data_by_country( url, data, country )
     data_store.scenario["response"] = response
     if response.ok:
@@ -171,7 +171,7 @@ def other_gateway_downloads_the_certificate_trustlist():
 @step("<country> deletes uploaded certificate")
 def deletes_uploaded_certificate(country):
     data=data_store.scenario['trusted.certificate.cms']
-    url = get_gateway_url_by_name('firstGateway') + '/trust/certificates'
+    url = get_gateway_url_by_name('firstGateway') + '/trust/certificate'
     response = _generic_upload_of_b64_data_by_country( url, data, country, delete=True )
     data_store.scenario["response"] = response
 
@@ -182,7 +182,7 @@ def check_that_the_certificate_is_not_in_the_trustlist():
 @step("<country> deletes uploaded certificate with alternate endpoint")
 def deletes_uploaded_certificate_with_alternate_endpoint(country):
     data=data_store.scenario['trusted.certificate.cms']
-    url = get_gateway_url_by_name('firstGateway') + '/trust/certificates/delete'
+    url = get_gateway_url_by_name('firstGateway') + '/trust/certificate/delete'
     response = _generic_upload_of_b64_data_by_country( url, data, country )
     data_store.scenario["response"] = response
 
@@ -190,14 +190,19 @@ def deletes_uploaded_certificate_with_alternate_endpoint(country):
 def delete_uploaded_certificate():
     country = data_store.scenario['trusted.certificate.last_uploader']
     data = data_store.scenario['trusted.certificate.cms']
-    url = get_gateway_url_by_name('firstGateway') + '/trust/certificates'
+    url = get_gateway_url_by_name('firstGateway') + '/trust/certificate'
     response = _generic_upload_of_b64_data_by_country( url, data, country, delete=True )
     data_store.scenario["response"] = response
 
 
 @step("<country> uploads CMS with trusted issuer")
 def uploads_cms_trusted_issuer_certificate(country):
-    assert False, "Add implementation code"
+    data=data_store.scenario['trusted.issuer.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/issuer'
+    response = _generic_upload_of_b64_data_by_country( url, data, country )
+    data_store.scenario["response"] = response
+    if response.ok:
+        data_store.scenario['trusted.issuer.last_uploader'] = country
 
 @step("<country> downloads the trusted issuer trustlist")
 def downloads_the_trusted_issuer_trustlist(country):
@@ -211,26 +216,41 @@ def check_that_the_trusted_issuer_is_in_the_trustlist():
 def other_gateway_downloads_the_trusted_issuer_trustlist():
     assert False, "Add implementation code"
 
-@step("<country> deletes uploaded trusted issuer certificate")
+@step("<country> deletes uploaded trusted issuer entry")
 def deletes_uploaded_trusted_issuer_certificate(country):
-    assert False, "Add implementation code"
+    data=data_store.scenario['trusted.issuer.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/issuer'
+    response = _generic_upload_of_b64_data_by_country( url, data, country, delete=True )
+    data_store.scenario["response"] = response
 
 @step("check that the trusted issuer is NOT in the trustlist")
 def check_that_the_trusted_issuer_is_not_in_the_trustlist():
     assert False, "Add implementation code"
 
-@step("<country> deletes uploaded trusted issuer certificate with alternate endpoint")
+@step("<country> deletes uploaded trusted issuer entry with alternate endpoint")
 def deletes_uploaded_trusted_issuer_certificate_with_alternate_endpoint(country):
-    assert False, "Add implementation code"
+    data=data_store.scenario['trusted.issuer.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/issuer/delete'
+    response = _generic_upload_of_b64_data_by_country( url, data, country )
+    data_store.scenario["response"] = response
 
 @step("delete uploaded trusted issuer entry")
 def delete_uploaded_trusted_issuer_certificate():
-    assert False, "Add implementation code"
+    country = data_store.scenario['trusted.issuer.last_uploader']
+    data = data_store.scenario['trusted.issuer.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/issuer'
+    response = _generic_upload_of_b64_data_by_country( url, data, country, delete=True )
+    data_store.scenario["response"] = response
 
 
 @step("<country> uploads CMS reference")
 def uploads_cms_reference(country):
-    assert False, "Add implementation code"
+    data=data_store.scenario['trusted.reference.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
+    response = _generic_upload_of_b64_data_by_country( url, data, country )
+    data_store.scenario["response"] = response
+    if response.ok:
+        data_store.scenario['trusted.reference.last_uploader'] = country
 
 @step("<country> downloads the reference trustlist")
 def downloads_the_reference_trustlist(country):
@@ -246,7 +266,10 @@ def other_gateway_downloads_the_reference_trustlist():
 
 @step("<country> deletes uploaded reference")
 def deletes_uploaded_reference(country):
-    assert False, "Add implementation code"
+    data=data_store.scenario['trusted.reference.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
+    response = _generic_upload_of_b64_data_by_country( url, data, country, delete=True )
+    data_store.scenario["response"] = response
 
 @step("check that the reference is NOT in the trustlist")
 def check_that_the_reference_is_not_in_the_trustlist():
@@ -254,8 +277,15 @@ def check_that_the_reference_is_not_in_the_trustlist():
 
 @step("<country> deletes uploaded reference with alternate endpoint")
 def deletes_uploaded_reference_with_alternate_endpoint(country):
-    assert False, "Add implementation code"
+    data=data_store.scenario['trusted.reference.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/reference/delete'
+    response = _generic_upload_of_b64_data_by_country( url, data, country )
+    data_store.scenario["response"] = response
 
 @step("delete uploaded reference")
 def delete_uploaded_reference():
-    assert False, "Add implementation code"    
+    country = data_store.scenario['trusted.reference.last_uploader']
+    data = data_store.scenario['trusted.reference.cms']
+    url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
+    response = _generic_upload_of_b64_data_by_country( url, data, country, delete=True )
+    data_store.scenario["response"] = response

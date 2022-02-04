@@ -2,7 +2,7 @@
 
 CountryA and CountryB are both authorized to use the gateway.
 CountryC is unauthorized. 
-The test cases cover the handling of trusted issuer certificates from their national backends
+The test cases cover the handling of trusted issuer entrys from their national backends
 
 
 ## upload trusted issuer
@@ -17,10 +17,10 @@ It must appear in the trustlist.
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
 
-## trusted issuer certificate data distribution
+## trusted issuer entry data distribution
 
 CountryA creates a trusted issuer entry and CountryB can download it.
-Another (simulated) gateway can also download the trusted issuer certificate. 
+Another (simulated) gateway can also download the trusted issuer entry. 
 
 * "CountryA" creates a trusted issuer entry
 * "CountryA" creates CMS message with trusted issuer
@@ -31,7 +31,7 @@ Another (simulated) gateway can also download the trusted issuer certificate.
 * "CountryB" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
 
-## delete trusted issuer certificate
+## delete trusted issuer entry
 
 CountryA creates a trusted issuer entry and deletes it using
 the defaulte endpoint
@@ -42,12 +42,12 @@ the defaulte endpoint
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
-* "CountryA" deletes uploaded trusted issuer certificate
+* "CountryA" deletes uploaded trusted issuer entry
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is NOT in the trustlist 
 
-## delete trusted issuer certificate alternate endpoint
+## delete trusted issuer entry alternate endpoint
 
 CountryA creates a trusted issuer entry and deletes it using
 the alternative endpoint (POST instead of DELETE)
@@ -58,15 +58,15 @@ the alternative endpoint (POST instead of DELETE)
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
-* "CountryA" deletes uploaded trusted issuer certificate with alternate endpoint
+* "CountryA" deletes uploaded trusted issuer entry with alternate endpoint
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is NOT in the trustlist 
 
 
-## unauthorized delete trusted issuer certificate
+## unauthorized delete trusted issuer entry
 
-CountryB tries to delete a trusted issuer certificate of CountryA.
+CountryB tries to delete a trusted issuer entry of CountryA.
 The operation must not succeed. 
 
 * "CountryA" creates a trusted issuer entry
@@ -75,7 +75,7 @@ The operation must not succeed.
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
-* "CountryB" deletes uploaded trusted issuer certificate
+* "CountryB" deletes uploaded trusted issuer entry
 * check that the response had an error
 * "CountryA" downloads the trusted issuer trustlist
 * check that the trusted issuer is in the trustlist 
@@ -87,7 +87,7 @@ The operation must not succeed.
 
 ## unauthorized upload trusted issuer 1
 
-CountryB attempts to upload a trusted issuer certificate of CountryA
+CountryB attempts to upload a trusted issuer entry of CountryA
 
 It must not appear in the trustlist. 
 * "CountryA" creates a trusted issuer entry
@@ -99,7 +99,7 @@ It must not appear in the trustlist.
 
 ## unauthorized upload trusted issuer 2
 
-CountryB attempts to upload a trusted issuer certificate of CountryA
+CountryB attempts to upload a trusted issuer entry of CountryA
 and has access  to CountryA's upload keys
 
 It must not appear in the trustlist. 
