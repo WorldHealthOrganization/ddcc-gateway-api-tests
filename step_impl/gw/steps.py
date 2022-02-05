@@ -158,7 +158,10 @@ def uploads_cms_certificate(country):
 
 @step("<country> downloads the certificate trustlist")
 def downloads_the_certificate_trustlist(country):
-    assert False, "Add implementation code"
+    data_store.scenario["response"] = requests.get(
+        url=environ.get('first_gateway_url')+'/trustedcertificates',
+        certs=get_country_cert_files(country, 'auth')
+    )
 
 @step("check that the certificate is in the trustlist")
 def check_that_the_certificate_is_in_the_trustlist():
@@ -206,7 +209,10 @@ def uploads_cms_trusted_issuer_certificate(country):
 
 @step("<country> downloads the trusted issuer trustlist")
 def downloads_the_trusted_issuer_trustlist(country):
-    assert False, "Add implementation code"
+    data_store.scenario["response"] = requests.get(
+        url=environ.get('first_gateway_url')+'/trustedissuers',
+        certs=get_country_cert_files(country, 'auth')
+    )
 
 @step("check that the trusted issuer is in the trustlist")
 def check_that_the_trusted_issuer_is_in_the_trustlist():
