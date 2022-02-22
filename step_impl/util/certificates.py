@@ -36,7 +36,7 @@ def get_own_country_name() -> str:
         open(path.join(certificateFolder, "csca.pem"), "rb").read())
     return get_country_name_from_certificate(csca_cert)
 
-def create_certificate(signing_cert: Certificate = None, signing_key: Certificate = None):
+def create_certificate(signing_cert: Certificate = None, signing_key: RSAPrivateKey = None):
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
     if signing_cert != None:

@@ -4,7 +4,6 @@ from step_impl.util import certificateFolder
 
 def get_country_code(country):
     """TODO: Load country code from certificates"""
-
     if country.lower() == 'countrya':
         return 'XA'
     elif country.lower() == 'countryb':
@@ -16,7 +15,7 @@ def get_country_code(country):
 
 
 def get_country_gateway_url(country):
-    'TODO: Keep config in environment or file'
+    """TODO: Keep config in environment or file"""
     return {
         'CountryA': environ.get('first_gateway_url'),
         'CountryB': environ.get('first_gateway_url'),
@@ -32,17 +31,17 @@ def get_gateway_url_by_name(gateway):
     }.get(gateway.lower().replace(' ', '').replace('_', ''))
 
 
-def get_country_cert_files(country, certtype):
+def get_country_cert_files(country, cert_type):
     """Return a tuple with paths to the country's certificate file and private key"""
 
-    assert certtype in ('csca', 'auth', 'upload'), "Unknown certificate type: Must be one of csca|auth|upload"
+    assert cert_type in ('csca', 'auth', 'upload'), "Unknown certificate type: Must be one of csca|auth|upload"
 
     # for compatibility: no country or "firstCountry" means old EU case
     if country == 'firstCountry' or country is None:
-        return path.join(certificateFolder, f"{certtype}.pem"), path.join(certificateFolder, f"key_{certtype}.pem")
+        return path.join(certificateFolder, f"{cert_type}.pem"), path.join(certificateFolder, f"key_{cert_type}.pem")
 
-    return path.join(certificateFolder, country, f"{certtype}.pem"), path.join(certificateFolder, country,
-                                                                               f"key_{certtype}.pem")
+    return (path.join(certificateFolder, country, f"{cert_type}.pem"),
+            path.join(certificateFolder, country, f"key_{cert_type}.pem"))
 
 
 def get_ssl_public_key(country):

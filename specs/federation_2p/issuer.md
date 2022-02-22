@@ -16,10 +16,10 @@ CountryC can download it from the secondary gateway
 * "CountryA" uploads CMS with trusted issuer
 * check that the response had no error
 * "CountryA" downloads the trusted issuer trustlist
-* check that the trusted issuer is in the trustlist 
-* wait for 120 seconds
+* check that the trusted issuer is in the trustlist
+* wait for "120" seconds
 * "CountryC" downloads the federated issuer trustlist
-* check that the trusted issuer is in the trustlist 
+* check that the trusted issuer is in the trustlist
 
 ___
 
