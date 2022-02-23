@@ -15,6 +15,7 @@ It must appear in the trustlist.
 * "CountryA" uploads CMS reference
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
+* check that the response had no error
 * check that the reference is in the trustlist 
 
 ## reference data distribution
@@ -29,7 +30,7 @@ Another (simulated) gateway can also download the reference.
 * Other gateway downloads the reference trustlist
 * check that the reference is in the trustlist 
 * "CountryB" downloads the reference trustlist
-* check that the reference is in the trustlist 
+* check that the reference is in the trustlist
 
 ## delete reference
 
@@ -45,23 +46,7 @@ the defaulte endpoint
 * "CountryA" deletes uploaded reference
 * check that the response had no error
 * "CountryA" downloads the reference trustlist
-* check that the reference is NOT in the trustlist 
-
-## delete reference alternate endpoint
-
-CountryA creates a reference and deletes it using
-the alternative endpoint (POST instead of DELETE)
-
-* "CountryA" creates a reference
-* "CountryA" creates CMS message with trusted reference
-* "CountryA" uploads CMS reference
-* check that the response had no error
-* "CountryA" downloads the reference trustlist
-* check that the reference is in the trustlist 
-* "CountryA" deletes uploaded reference with alternate endpoint
-* check that the response had no error
-* "CountryA" downloads the reference trustlist
-* check that the reference is NOT in the trustlist 
+* check that the reference is NOT in the trustlist
 
 
 ## unauthorized delete reference
