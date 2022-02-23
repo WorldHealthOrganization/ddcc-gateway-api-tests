@@ -12,10 +12,6 @@ from step_impl.util.certificates import create_cms, create_dsc, create_certifica
 from step_impl.util.testdata import get_country_cert_files, get_gateway_url_by_name
 
 
-# TODO: trust/reference/uuid?
-# TODO: trust/issuers/country?
-
-
 def _generic_cms_for_country(data, country):
     """
         Internal:
@@ -63,10 +59,10 @@ def creates_a_certificate(country):
 @step("<country> downloads the federated certificate trustlist")
 def downloads_the_federated_certificate_trustlist(country):
     data_store.scenario['response'] = requests.get(
-        # TODO:
-        url=environ.get('first_gateway_url') + '/federation/trustlist/certificates',
+        url=testdata.get_country_gateway_url(country) + '/trustList/certificate',
         cert=get_country_cert_files(country, 'auth'),
-        verify=verify
+        verify=verify,
+        params={"withFederation": True}
     )
 
     try:
@@ -78,9 +74,10 @@ def downloads_the_federated_certificate_trustlist(country):
 @step("<country> downloads the federated issuer trustlist")
 def downloads_the_federated_issuer_trustlist(country):
     data_store.scenario["response"] = requests.get(
-        url=environ.get('first_gateway_url') + '/federation/trustlist/issuers',
+        url=testdata.get_country_gateway_url(country) + '/trustList/issuers',
         cert=get_country_cert_files(country, 'auth'),
-        verify=verify
+        verify=verify,
+        params={"withFederation": True}
     )
 
     try:
@@ -91,10 +88,12 @@ def downloads_the_federated_issuer_trustlist(country):
 
 @step("<country> downloads federated signatures")
 def downloads_federated_signatures(country):
+    # TODO: this endpoint doesn't exist
     data_store.scenario["response"] = requests.get(
-        url=environ.get('first_gateway_url') + '/federation/trustlist/signatures',
+        url=testdata.get_country_gateway_url(country) + '/federation/trustlist/signatures',
         cert=get_country_cert_files(country, 'auth'),
-        verify=verify
+        verify=verify,
+        params={"withFederation": True}
     )
 
     try:
@@ -109,7 +108,8 @@ def downloads_the_federated_gateway_list_on(country, gateway):
     data_store.scenario["response"] = requests.get(
         url=gateway_url + '/federation/gateways',
         cert=get_country_cert_files(country, 'auth'),
-        verify=verify
+        verify=verify,
+        params={"withFederation": True}
     )
 
 
@@ -122,6 +122,7 @@ def check_that_is_in_the_gateway_list(gateway):
 
 @step("<country> downloads the federated federator list on <gateway>")
 def downloads_the_federated_federator_list_on(country, gateway):
+    # TODO: this endpoint doesn't exist
     gateway_url = testdata.get_gateway_url_by_name(gateway)
     data_store.scenario["response"] = requests.get(
         url=gateway_url + '/federation/federators',
@@ -139,6 +140,7 @@ def check_that_is_in_the_federator_list(gateway):
 
 @step("<country> downloads the federation metadata on <gateway>")
 def downloads_the_federation_metadata_on(country, gateway):
+    # TODO: this endpoint doesn't exist
     gateway_url = testdata.get_gateway_url_by_name(gateway)
     data_store.scenario["response"] = requests.get(
         url=gateway_url + '/federation/metadata',
@@ -150,16 +152,16 @@ def downloads_the_federation_metadata_on(country, gateway):
 @step("check that meta data structure is OK")
 def check_that_meta_data_structure_is_ok():
     """TODO: Meta data structure not finalized yet"""
-
     metadata = json.load(data_store.scenario["response"].text)
 
 
 @step("<country> downloads the federated reference trustlist")
 def downloads_the_federated_reference_trustlist(country):
     data_store.scenario["response"] = requests.get(
-        url=environ.get('first_gateway_url') + '/federation/trustlist/references',
+        url=testdata.get_country_gateway_url(country) + '/trustList/references',
         cert=get_country_cert_files(country, 'auth'),
-        verify=verify
+        verify=verify,
+        params={"withFederation": True}
     )
 
     try:
@@ -193,7 +195,7 @@ def uploads_cms_certificate(country):
 @step("<country> downloads the certificate trustlist")
 def downloads_the_certificate_trustlist(country):
     data_store.scenario["response"] = requests.get(
-        url=environ.get('first_gateway_url') + '/trustedCertificate',
+        url=environ.get('first_gateway_url') + '/trustList/certificate',
         cert=get_country_cert_files(country, 'auth'),
         verify=verify
     )
@@ -249,7 +251,7 @@ def delete_uploaded_certificate():
 
 @step("<country> uploads CMS with trusted issuer")
 def uploads_cms_trusted_issuer_certificate(country):
-    # TODO: # TODO: trust/issuers has no post endpoint
+    # TODO: trust/issuers has no post endpoint
     data = data_store.scenario['trusted.issuer.cms']
     url = get_gateway_url_by_name('firstGateway') + '/trust/issuers'
     response = _generic_upload_of_data_by_country(url, data, country)
@@ -261,7 +263,7 @@ def uploads_cms_trusted_issuer_certificate(country):
 @step("<country> downloads the trusted issuer trustlist")
 def downloads_the_trusted_issuer_trustlist(country):
     data_store.scenario["response"] = requests.get(
-        url=environ.get('first_gateway_url') + '/trust/issuers',
+        url=environ.get('first_gateway_url') + '/trustList/issuers',
         cert=get_country_cert_files(country, 'auth'),
         verify=verify
     )
