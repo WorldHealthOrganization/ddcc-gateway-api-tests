@@ -21,6 +21,7 @@ from requests import Response
 @step("check that the response had no error")
 def check_that_the_response_had_no_error():
     response: Response = data_store.scenario["response"]
+    print(f"{response.status_code}, {response.text}")
     assert response.ok, f"Response Code had an error but it shoudn't. Status Code {response.status_code}"
 
 

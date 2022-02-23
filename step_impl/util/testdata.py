@@ -17,10 +17,10 @@ def get_country_code(country):
 def get_country_gateway_url(country):
     """TODO: Keep config in environment or file"""
     return {
-        'CountryA': environ.get('first_gateway_url'),
-        'CountryB': environ.get('first_gateway_url'),
-        'CountryC': environ.get('second_gateway_url'),
-    }.get(country)
+        'countrya': environ.get('first_gateway_url'),
+        'countryb': environ.get('first_gateway_url'),
+        'countryc': environ.get('second_gateway_url'),
+    }.get(country.lower())
 
 
 def get_gateway_url_by_name(gateway):
