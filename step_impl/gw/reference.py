@@ -4,7 +4,8 @@ from os import environ
 import requests
 from getgauge.python import step, data_store
 
-from step_impl.gw.gateway_util import _generic_upload_of_data_by_country, _generic_cms_for_country, failed_response
+from step_impl.gw.gateway_util import _generic_upload_of_data_by_country, _generic_cms_for_country, failed_response, \
+    sign
 from step_impl.util import testdata, verify
 from step_impl.util.testdata import get_country_cert_files, get_gateway_url_by_name
 
@@ -74,9 +75,10 @@ def is_reference_in_trustlist():
 
 @step("<country> deletes uploaded reference")
 def deletes_uploaded_reference(country):
-    body = json.dumps({'uuid': data_store.scenario["trusted.reference.uuid"]})
+    body = json.dumps({'uuid': str(data_store.scenario["trusted.reference.uuid"])})
+    data = sign(bytes(body, 'utf-8'), country).decode('utf-8')
     url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
-    response = _generic_upload_of_data_by_country(url, body, country, delete=True)
+    response = _generic_upload_of_data_by_country(url, data, country, delete=True)
     data_store.scenario["response"] = response
     if response.ok:
         data_store.scenario.pop('trusted.reference.last_uploader', None)
