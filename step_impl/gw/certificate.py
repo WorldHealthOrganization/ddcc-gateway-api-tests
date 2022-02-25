@@ -100,6 +100,8 @@ def deletes_uploaded_certificate(country):
     url = get_gateway_url_by_name('firstGateway') + '/trustedCertificate'
     response = _generic_upload_of_data_by_country(url, data, country, delete=True)
     data_store.scenario["response"] = response
+    if response.ok:
+        data_store.scenario.pop('trusted.certificate.last_uploader', None)
 
 
 @step("<country> deletes uploaded certificate with alternate endpoint")
@@ -108,6 +110,8 @@ def deletes_uploaded_certificate_with_alternate_endpoint(country):
     url = get_gateway_url_by_name('firstGateway') + '/trustedCertificate/delete'
     response = _generic_upload_of_data_by_country(url, data, country)
     data_store.scenario["response"] = response
+    if response.ok:
+        data_store.scenario.pop('trusted.certificate.last_uploader', None)
 
 
 @step("delete uploaded certificate")
