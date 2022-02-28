@@ -13,7 +13,7 @@ def creates_a_reference(country):
     data_store.scenario["trusted.reference.thumbprint"] = sha256(os.urandom(8)).hexdigest()
     reference = {
         # 'uuid': str(uuid4()), TODO: if set an existing reference can be updated, Test-Cases for this?
-        "version": "1.3.0",
+        "version": 1,
         "country": testdata.get_country_code(country),
         "type": "DCC",
         "service": "ValueSet",  # ValueSet, PlanDefinition, etc.
