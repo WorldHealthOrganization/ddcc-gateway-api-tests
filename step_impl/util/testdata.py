@@ -54,4 +54,4 @@ def get_ssl_public_key(country):
     bGlkYXRpb25TZXJ2aWNlU2lnbktleTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIMdlvwpEPWm
     brhAZLOZm6NGyCQofFbpE1EfYK9i+kLpmwDgAtc99zoZg9d2oZtpC9zNLs71cncpJSkqpST1HKEw
     CgYIKoZIzj0EAwIDRwAwRAIgct73rVroQYuxpZS/Y/awVrceBjAOvFqmxDr07Y8BBqsCIBjH9085
-    RqVzFfZsdO9Y9YazZ1q0+oqmwl7ypT2xWEoU'''
+    RqVzFfZsdO9Y9YazZ1q0+oqmwl7ypT2xWEoU'''.replace('\n','').replace(' ','')

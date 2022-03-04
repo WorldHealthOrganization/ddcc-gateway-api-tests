@@ -12,6 +12,10 @@ from step_impl.util import testdata, verify
 from step_impl.util.certificates import create_certificate
 from step_impl.util.testdata import get_country_cert_files, get_gateway_url_by_name
 
+if not verify: 
+    import urllib3
+    urllib3.disable_warnings()
+
 
 @step("<country> creates a certificate")
 def creates_a_certificate(country):
@@ -39,7 +43,7 @@ def uploads_cms_certificate(country):
     url = get_gateway_url_by_name('firstGateway') + '/trustedCertificate'
     response = _generic_upload_of_data_by_country(url, data, country, b64=False, content_type='application/json')
     data_store.scenario["response"] = response
-    print(f"{response.status_code}, {response.text}")
+    #print(f"{response.status_code}, {response.text}")
     if response.ok:
         data_store.scenario['trusted.certificate.last_uploader'] = country
 
@@ -89,11 +93,6 @@ def is_certificate_in_trustlist():
     return any(certificate['certificate'] == cert for certificate in trustlist)
 
 
-@step("Other gateway downloads the certificate trustlist")
-def other_gateway_downloads_the_certificate_trustlist():
-    assert False, "Add implementation code"  # TODO: simulate gateway, onboard certificates for that etc.
-
-
 @step("<country> deletes uploaded certificate")
 def deletes_uploaded_certificate(country):
     data = data_store.scenario['trusted.certificate.signed_b64']
@@ -117,7 +116,7 @@ def deletes_uploaded_certificate_with_alternate_endpoint(country):
 @step("delete uploaded certificate")
 def delete_uploaded_certificate():
     if 'trusted.certificate.last_uploader' not in data_store.scenario:
-        print('No certificate has been uploaded successfully, skipping deletion')
+        print(' (S)') # No certificate has been uploaded successfully, skipping deletion
         return
     country = data_store.scenario['trusted.certificate.last_uploader']
     deletes_uploaded_certificate(country)

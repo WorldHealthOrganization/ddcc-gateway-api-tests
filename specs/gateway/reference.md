@@ -27,7 +27,7 @@ Another (simulated) gateway can also download the reference.
 * "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
-* Other gateway downloads the reference trustlist
+* "OtherGateway" downloads the reference trustlist
 * check that the reference is in the trustlist 
 * "CountryB" downloads the reference trustlist
 * check that the reference is in the trustlist

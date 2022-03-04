@@ -29,7 +29,7 @@ Another (simulated) gateway can also download the certificate.
 * "CountryA" uploads CMS with certificate
 * check that the response had no error
 * Reference "TXR-4994"
-* Other gateway downloads the certificate trustlist
+* "OtherGateway" downloads the certificate trustlist
 * check that the certificate is in the trustlist 
 * Reference "TXR-4998"
 * "CountryB" downloads the certificate trustlist

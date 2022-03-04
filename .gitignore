@@ -10,11 +10,19 @@ reports
 # Gauge - python compiled files
 *.pyc
 
-certificates/**/*.pem
+
+*.pem
+*.crt
+*.key
+*.kid
+
+
 venv/*
 .venv/*
 
 # Environment variable definitions
-environment.sh
-environment.cmd 
-environment.ps1
+environment.*
+
+# data files
+t*.json
+

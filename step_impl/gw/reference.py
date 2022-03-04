@@ -9,6 +9,10 @@ from step_impl.gw.gateway_util import _generic_upload_of_data_by_country, _gener
 from step_impl.util import testdata, verify
 from step_impl.util.testdata import get_country_cert_files, get_gateway_url_by_name
 
+if not verify: 
+    import urllib3
+    urllib3.disable_warnings()
+
 
 @step("<country> creates CMS message with trusted reference")
 def creates_cms_message_with_reference(country):
@@ -76,6 +80,7 @@ def is_reference_in_trustlist():
 @step("<country> deletes uploaded reference")
 def deletes_uploaded_reference(country):
     body = json.dumps({'uuid': str(data_store.scenario["trusted.reference.uuid"])})
+    print(f'\nDEBUG: Attempt deleting {body}\n')
     data = sign(bytes(body, 'utf-8'), country).decode('utf-8')
     url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
     response = _generic_upload_of_data_by_country(url, data, country, delete=True)
@@ -87,12 +92,9 @@ def deletes_uploaded_reference(country):
 @step("delete uploaded reference")
 def delete_uploaded_reference():
     if 'trusted.reference.last_uploader' not in data_store.scenario:
-        print('No reference has been uploaded successfully, skipping deletion')
+        print('(S)') # skipping deletion
         return
     country = data_store.scenario['trusted.reference.last_uploader']
     deletes_uploaded_reference(country)
 
 
-@step("Other gateway downloads the reference trustlist")
-def other_gateway_downloads_the_reference_trustlist():
-    assert False, "Add implementation code"  # TODO: simulate other gateway

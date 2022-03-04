@@ -7,6 +7,9 @@ from step_impl.gw.gateway_util import failed_response
 from step_impl.util import testdata, verify
 from step_impl.util.testdata import get_country_cert_files
 
+if not verify: 
+    import urllib3
+    urllib3.disable_warnings()
 
 @step("<country> downloads the trusted issuer trustlist")
 def downloads_the_trusted_issuer_trustlist(country):
@@ -19,11 +22,16 @@ def downloads_the_trusted_issuer_trustlist(country):
     except IOError as err:
         failed_response(err)
 
+    try:
+        data_store.scenario["downloaded.trustlist.issuers"] = data_store.scenario["response"].json()
+    except:
+        pass  # Fail silently because checks are performed in different functions and are expected for negative tests
+
 
 @step("<country> downloads the federated issuer trustlist")
 def downloads_the_federated_issuer_trustlist(country):
     data_store.scenario["response"] = requests.get(
-        url=testdata.get_country_gateway_url(country) + '/trustList/issuers',
+        url=testdata.get_country_gateway_url(country) + '/trustList/issuers?withFederation=true',
         cert=get_country_cert_files(country, 'auth'),
         verify=verify,
         params={"withFederation": True}
@@ -34,6 +42,14 @@ def downloads_the_federated_issuer_trustlist(country):
     except:
         pass  # Fail silently because checks are performed in different functions and are expected for negative tests
 
+
+@step("check that at least one entry with <country> = <XA> is in the trustlist")
+def check_if_entry_exists_with(fieldname, fieldvalue):
+    for entry in data_store.scenario["downloaded.trustlist.issuers"]:
+        if entry[fieldname] == fieldvalue:
+            return True
+    
+    assert False, f"No entry with {fieldname} == {fieldvalue} in trust list"
 
 @step("check that the trusted issuer is in the trustlist")
 def check_that_the_trusted_issuer_is_in_the_trustlist():
@@ -51,7 +67,3 @@ def is_trusted_issuer_in_trustlist():
             return True
     return False
 
-
-@step("Other gateway downloads the trusted issuer trustlist")
-def other_gateway_downloads_the_trusted_issuer_trustlist():
-    assert False, "Add implementation code"  # TODO: simulate other gateway
