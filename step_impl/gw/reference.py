@@ -7,7 +7,7 @@ from getgauge.python import step, data_store
 from step_impl.gw.gateway_util import _generic_upload_of_data_by_country, _generic_cms_for_country, failed_response, \
     sign
 from step_impl.util import testdata, verify
-from step_impl.util.testdata import get_country_cert_files, get_gateway_url_by_name
+from step_impl.util.testdata import get_country_cert_files
 
 if not verify: 
     import urllib3
@@ -23,7 +23,7 @@ def creates_cms_message_with_reference(country):
 @step("<country> uploads CMS reference")
 def uploads_cms_reference(country):
     data = data_store.scenario['trusted.reference.cms']
-    url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
+    url = data_store.scenario["gateway.url"] + '/trust/reference'
     response = _generic_upload_of_data_by_country(url, data, country)
     data_store.scenario["response"] = response
     if response.ok:
@@ -34,7 +34,7 @@ def uploads_cms_reference(country):
 def downloads_the_reference_trustlist(country):
     try:
         data_store.scenario["response"] = requests.get(
-            url=environ.get('first_gateway_url') + '/trustList/references',
+            url=data_store.scenario["gateway.url"] + '/trustList/references',
             cert=get_country_cert_files(country, 'auth'),
             verify=verify
         )
@@ -45,7 +45,7 @@ def downloads_the_reference_trustlist(country):
 @step("<country> downloads the federated reference trustlist")
 def downloads_the_federated_reference_trustlist(country):
     data_store.scenario["response"] = requests.get(
-        url=testdata.get_country_gateway_url(country) + '/trustList/references',
+        url=data_store.scenario["gateway.url"] + '/trustList/references',
         cert=get_country_cert_files(country, 'auth'),
         verify=verify,
         params={"withFederation": True}
@@ -82,7 +82,7 @@ def deletes_uploaded_reference(country):
     body = json.dumps({'uuid': str(data_store.scenario["trusted.reference.uuid"])})
     print(f'\nDEBUG: Attempt deleting {body}\n')
     data = sign(bytes(body, 'utf-8'), country).decode('utf-8')
-    url = get_gateway_url_by_name('firstGateway') + '/trust/reference'
+    url = data_store.scenario["gateway.url"] + '/trust/reference'
     response = _generic_upload_of_data_by_country(url, data, country, delete=True)
     data_store.scenario["response"] = response
     if response.ok:
@@ -92,7 +92,7 @@ def deletes_uploaded_reference(country):
 @step("delete uploaded reference")
 def delete_uploaded_reference():
     if 'trusted.reference.last_uploader' not in data_store.scenario:
-        print('(S)') # skipping deletion
+        print( '(S)', end='') # skipping deletion
         return
     country = data_store.scenario['trusted.reference.last_uploader']
     deletes_uploaded_reference(country)

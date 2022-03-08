@@ -11,11 +11,12 @@ if not verify:
     import urllib3
     urllib3.disable_warnings()
 
+
 @step("<country> downloads the trusted issuer trustlist")
-def downloads_the_trusted_issuer_trustlist(country):
+def downloads_the_trusted_issuer_trustlist(country, gateway='first_gateway_url'):
     try:
         data_store.scenario["response"] = requests.get(
-            url=environ.get('first_gateway_url') + '/trustList/issuers',
+            url=data_store.scenario["gateway.url"] + '/trustList/issuers',
             cert=get_country_cert_files(country, 'auth'),
             verify=verify
         )
@@ -27,11 +28,10 @@ def downloads_the_trusted_issuer_trustlist(country):
     except:
         pass  # Fail silently because checks are performed in different functions and are expected for negative tests
 
-
 @step("<country> downloads the federated issuer trustlist")
-def downloads_the_federated_issuer_trustlist(country):
+def downloads_the_federated_issuer_trustlist(country, gateway='first_gateway_url'):
     data_store.scenario["response"] = requests.get(
-        url=testdata.get_country_gateway_url(country) + '/trustList/issuers?withFederation=true',
+        url=data_store.scenario["gateway.url"]+ '/trustList/issuers?withFederation=true',
         cert=get_country_cert_files(country, 'auth'),
         verify=verify,
         params={"withFederation": True}
@@ -43,13 +43,22 @@ def downloads_the_federated_issuer_trustlist(country):
         pass  # Fail silently because checks are performed in different functions and are expected for negative tests
 
 
-@step("check that at least one entry with <country> = <XA> is in the trustlist")
+@step("check that at least one issuer with <fieldname> = <fieldvalue> is in the trustlist")
 def check_if_entry_exists_with(fieldname, fieldvalue):
     for entry in data_store.scenario["downloaded.trustlist.issuers"]:
         if entry[fieldname] == fieldvalue:
             return True
     
     assert False, f"No entry with {fieldname} == {fieldvalue} in trust list"
+
+@step("check that no issuer with <fieldname> = <fieldvalue> is in the trustlist")
+def check_if_entry_exists_with(fieldname, fieldvalue):
+    for entry in data_store.scenario["downloaded.trustlist.issuers"]:
+        if entry.get(fieldname) == fieldvalue:
+            assert False, f"Found {fieldname} == {fieldvalue} in {entry}"
+    
+    return True
+
 
 @step("check that the trusted issuer is in the trustlist")
 def check_that_the_trusted_issuer_is_in_the_trustlist():

@@ -115,6 +115,18 @@ It must not appear in the trustlist.
 * check that the certificate is NOT in the trustlist 
 
 
+## Upload cert with wrong CSCA
+
+CountryA tries to upload a certificate signed with a non-onboarded CSCA
+
+* "CountryA" creates a certificate with wrong CSCA
+* "CountryA" creates CMS message with certificate
+* "CountryA" uploads CMS with certificate
+* check that the response had an error
+* "CountryA" downloads the certificate trustlist
+* check that the certificate is NOT in the trustlist 
+
+
 ___
 
 * delete uploaded certificate

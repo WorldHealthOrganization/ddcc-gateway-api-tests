@@ -36,7 +36,7 @@ def get_own_country_name() -> str:
         open(path.join(certificateFolder, "csca.pem"), "rb").read())
     return get_country_name_from_certificate(csca_cert)
 
-def create_certificate(signing_cert: Certificate = None, signing_key: RSAPrivateKey = None):
+def create_certificate(signing_cert: Certificate = None, signing_key: RSAPrivateKey = None, common_name = 'TestCert', valid_seconds=10):
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
     if signing_cert != None:
@@ -46,18 +46,16 @@ def create_certificate(signing_cert: Certificate = None, signing_key: RSAPrivate
 
     subject = x509.Name([
         x509.NameAttribute(NameOID.COUNTRY_NAME, countryName),
-        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME,
-                           u"Nothrhine Westphalia"),
-        x509.NameAttribute(NameOID.LOCALITY_NAME, u"Essen"),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME,
-                           u"T-Systems International"),
-        x509.NameAttribute(NameOID.COMMON_NAME, u"api-test"),
+        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "Nowhere"),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, "Someplace"),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Fictional Testing Company"),
+        x509.NameAttribute(NameOID.COMMON_NAME, common_name),
     ])
 
     issuer = signing_cert.issuer if signing_cert != None else subject
     keyUsedToSign = signing_key if signing_key != None else key
     cert = x509.CertificateBuilder().subject_name(subject).issuer_name(issuer).public_key(key.public_key()).serial_number(
-        x509.random_serial_number()).not_valid_before(datetime.utcnow()).not_valid_after(datetime.utcnow() + timedelta(seconds=10)).sign(keyUsedToSign, hashes.SHA256())
+        x509.random_serial_number()).not_valid_before(datetime.utcnow()).not_valid_after(datetime.utcnow() + timedelta(seconds=valid_seconds)).sign(keyUsedToSign, hashes.SHA256())
     return (cert, key)
 
 

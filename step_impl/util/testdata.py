@@ -23,14 +23,6 @@ def get_country_gateway_url(country):
     }.get(country.lower())
 
 
-def get_gateway_url_by_name(gateway):
-    return {
-        'firstgateway': environ.get('first_gateway_url'),
-        'secondgateway': environ.get('first_gateway_url'),
-        'thirdgateway': environ.get('second_gateway_url'),
-    }.get(gateway.lower().replace(' ', '').replace('_', ''))
-
-
 def get_country_cert_files(country, cert_type):
     """Return a tuple with paths to the country's certificate file and private key"""
 

@@ -24,7 +24,7 @@ first_gateway_url = environ.get('first_gateway_url')
 second_gateway_url = environ.get('second_gateway_url')
 third_gateway_url = environ.get('third_gateway_url')
 
-verify = bool(environ.get('third_gateway_url'))
+verify = bool(environ.get('verify_https'))
 
 certificateFolder = join(getcwd(), environ.get("certificatesFolder"))
 authCerts = (
