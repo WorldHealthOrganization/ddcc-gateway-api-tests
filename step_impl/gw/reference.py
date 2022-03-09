@@ -1,7 +1,8 @@
 import json
-from os import environ
+from os import environ,urandom
 
 import requests
+from hashlib import sha256
 from getgauge.python import step, data_store
 
 from step_impl.gw.gateway_util import _generic_upload_of_data_by_country, _generic_cms_for_country, failed_response, \
@@ -12,6 +13,35 @@ from step_impl.util.testdata import get_country_cert_files
 if not verify: 
     import urllib3
     urllib3.disable_warnings()
+
+
+
+@step("<country> creates a reference")
+def creates_a_reference(country):
+    # using pseudo-random thumbprint as identifier to find an uploaded reference in the trust list 
+    data_store.scenario["trusted.reference.thumbprint"] = sha256(urandom(16)).hexdigest()
+    reference = {
+        # 'uuid': str(uuid4()), TODO: if set an existing reference can be updated, Test-Cases for this?
+        "version": 1,
+        "url": "https://testing.only.this/does/not/exist",
+        "country": testdata.get_country_code(country),
+        "domain": "DCC",
+        "type": "DCC",
+        "service": "ValueSet",  # ValueSet, PlanDefinition, etc.
+        "thumbprint": data_store.scenario["trusted.reference.thumbprint"],
+        "name": "TestReference",
+        "sslPublicKey": testdata.get_ssl_public_key(country),
+        "contentType": 'application/json',
+        "signatureType": "CMS",
+        "referenceVersion": "1.3.0"
+    }
+
+    data_store.scenario["trusted.reference.raw"] = reference
+    return reference
+
+@step("modify reference set <fieldname> to <value>")
+def modify_reference(fieldname, value):
+    data_store.scenario["trusted.reference.raw"][fieldname] = value
 
 
 @step("<country> creates CMS message with trusted reference")
@@ -36,25 +66,11 @@ def downloads_the_reference_trustlist(country):
         data_store.scenario["response"] = requests.get(
             url=data_store.scenario["gateway.url"] + '/trustList/references',
             cert=get_country_cert_files(country, 'auth'),
-            verify=verify
+            verify=verify,
+            params=data_store.scenario["search.filter"]
         )
     except IOError as err:
         failed_response(err)
-
-
-@step("<country> downloads the federated reference trustlist")
-def downloads_the_federated_reference_trustlist(country):
-    data_store.scenario["response"] = requests.get(
-        url=data_store.scenario["gateway.url"] + '/trustList/references',
-        cert=get_country_cert_files(country, 'auth'),
-        verify=verify,
-        params={"withFederation": True}
-    )
-
-    try:
-        data_store.scenario["downloaded.trustlist.references"] = data_store.scenario["response"].json()
-    except:
-        pass  # Fail silently because checks are performed in different functions and are expected for negative tests
 
 
 @step("check that the reference is in the trustlist")
@@ -71,7 +87,7 @@ def check_that_the_reference_is_not_in_the_trustlist():
 def is_reference_in_trustlist():
     thumbprint = data_store.scenario["trusted.reference.thumbprint"]
     for reference in data_store.scenario["response"].json():
-        if reference['thumbprint'] == thumbprint:
+        if reference['thumbprint'] == thumbprint: # using pseudo-random thumbprint as identifier
             data_store.scenario["trusted.reference.uuid"] = reference['uuid']
             return True
     return False

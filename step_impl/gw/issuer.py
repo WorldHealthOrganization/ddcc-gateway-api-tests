@@ -18,7 +18,8 @@ def downloads_the_trusted_issuer_trustlist(country, gateway='first_gateway_url')
         data_store.scenario["response"] = requests.get(
             url=data_store.scenario["gateway.url"] + '/trustList/issuers',
             cert=get_country_cert_files(country, 'auth'),
-            verify=verify
+            verify=verify,
+            params=data_store.scenario["search.filter"]
         )
     except IOError as err:
         failed_response(err)
@@ -27,37 +28,6 @@ def downloads_the_trusted_issuer_trustlist(country, gateway='first_gateway_url')
         data_store.scenario["downloaded.trustlist.issuers"] = data_store.scenario["response"].json()
     except:
         pass  # Fail silently because checks are performed in different functions and are expected for negative tests
-
-@step("<country> downloads the federated issuer trustlist")
-def downloads_the_federated_issuer_trustlist(country, gateway='first_gateway_url'):
-    data_store.scenario["response"] = requests.get(
-        url=data_store.scenario["gateway.url"]+ '/trustList/issuers?withFederation=true',
-        cert=get_country_cert_files(country, 'auth'),
-        verify=verify,
-        params={"withFederation": True}
-    )
-
-    try:
-        data_store.scenario["downloaded.trustlist.issuers"] = data_store.scenario["response"].json()
-    except:
-        pass  # Fail silently because checks are performed in different functions and are expected for negative tests
-
-
-@step("check that at least one issuer with <fieldname> = <fieldvalue> is in the trustlist")
-def check_if_entry_exists_with(fieldname, fieldvalue):
-    for entry in data_store.scenario["downloaded.trustlist.issuers"]:
-        if entry[fieldname] == fieldvalue:
-            return True
-    
-    assert False, f"No entry with {fieldname} == {fieldvalue} in trust list"
-
-@step("check that no issuer with <fieldname> = <fieldvalue> is in the trustlist")
-def check_if_entry_exists_with(fieldname, fieldvalue):
-    for entry in data_store.scenario["downloaded.trustlist.issuers"]:
-        if entry.get(fieldname) == fieldvalue:
-            assert False, f"Found {fieldname} == {fieldvalue} in {entry}"
-    
-    return True
 
 
 @step("check that the trusted issuer is in the trustlist")

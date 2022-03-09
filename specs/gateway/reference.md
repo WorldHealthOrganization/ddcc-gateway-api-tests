@@ -11,6 +11,7 @@ CountryA creates a reference and uploads it.
 It must appear in the trustlist. 
 
 * "CountryA" creates a reference
+* modify reference set "domain" to "DCC"
 * "CountryA" creates CMS message with trusted reference
 * "CountryA" uploads CMS reference
 * check that the response had no error
@@ -95,6 +96,13 @@ It must not appear in the trustlist.
 * "CountryA" downloads the reference trustlist
 * check that the reference is NOT in the trustlist 
 
+## Invalid domain in reference is rejected
+
+* "CountryA" creates a reference
+* modify reference set "domain" to "DoesntExist"
+* "CountryA" creates CMS message with trusted reference
+* "CountryA" uploads CMS reference
+* check that the response had an error
 
 ___
 

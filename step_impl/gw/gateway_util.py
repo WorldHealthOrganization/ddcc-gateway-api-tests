@@ -33,8 +33,38 @@ def _generic_upload_of_data_by_country(url, data, country, delete=False, b64=Tru
         return requests.delete(url=url, data=data, headers=headers, cert=certs, verify=verify)
 
 @before_scenario
-def select_first_gateway():
-    return select_gateway('first_gateway')
+def reset_scenario_settings():
+    reset_search_filter()
+    select_gateway('first_gateway')
+
+@step("reset search filter")
+def reset_search_filter():
+    data_store.scenario["search.filter"] = {}
+
+@step("set filter for <key> to <value>")
+def set_filter_for(key, value):
+    data_store.scenario["search.filter"][key] = value
+
+
+@step("check that at least one entry with <fieldname> = <fieldvalue> is in the response")
+def check_if_entry_exists_with(fieldname, fieldvalue):
+    for entry in data_store.scenario["response"].json():
+        if entry.get(fieldname) == fieldvalue:
+            return True
+    
+    assert False, f"No entry with {fieldname} == {fieldvalue} in trust list"
+
+@step("check that no entry with <fieldname> = <fieldvalue> is in the response")
+def check_if_no_entry_exists_with(fieldname, fieldvalue):
+    try:
+        for entry in data_store.scenario["response"].json():
+            if entry.get(fieldname) == fieldvalue:
+                assert False, f"Found {fieldname} == {fieldvalue} in {entry}"
+    except:
+        pass # Not able to parse response means not found 
+
+    return True
+
 
 @step("select gateway <gateway_name>")
 def select_gateway(gateway_name): 

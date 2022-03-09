@@ -10,7 +10,7 @@ TODO: check the structure of the response?
 
 * "CountryA" downloads the trusted issuer trustlist
 * check that the response had no error
-* check that at least one entry with "country" = "XA" is in the trustlist
+* check that at least one entry with "country" = "XA" is in the response
 
 
 ## unauthorized access to trusted issuer trustlist

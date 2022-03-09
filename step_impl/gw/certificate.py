@@ -73,25 +73,12 @@ def downloads_the_certificate_trustlist(country):
         data_store.scenario["response"] = requests.get(
             url=data_store.scenario["gateway.url"] + '/trustList/certificate',
             cert=get_country_cert_files(country, 'auth'),
-            verify=verify
+            verify=verify,
+            params=data_store.scenario["search.filter"]
+
         )
     except IOError as error:
         failed_response(error)
-
-
-@step("<country> downloads the federated certificate trustlist")
-def downloads_the_federated_certificate_trustlist(country):
-    data_store.scenario['response'] = requests.get(
-        url=data_store.scenario["gateway.url"] + '/trustList/certificate',
-        cert=get_country_cert_files(country, 'auth'),
-        verify=verify,
-        params={"withFederation": True}
-    )
-
-    try:
-        data_store.scenario["downloaded.trustlist.certificates"] = data_store.scenario["response"].json()
-    except:
-        pass  # Fail silently because checks are performed in different functions and are expected for negative tests
 
 
 @step("check that the certificate is in the trustlist")
