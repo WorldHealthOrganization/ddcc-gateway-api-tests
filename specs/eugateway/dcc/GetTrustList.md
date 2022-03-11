@@ -10,6 +10,10 @@ all test cases for getting the DSC (Signing Certificates)
    |UPLOAD|DE     |
    |DSC   |DE     |
 
+## get the complete trustlist
+* get complete trustlist
+* check that the response had no error
+
 ## get trustlist
 
 Get all trusted public keys

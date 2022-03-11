@@ -29,7 +29,9 @@ from step_impl.util import eu_gateway_url, certificateFolder, verify
 
 @step("check that DSC is in trustlist")
 def check_dsc_is_in_trustlist():
-    get_complete_trustlist();
+    #get_complete_trustlist();
+    get_the_trustlist_with_the_type('DSC')
+
     response = data_store.scenario["response"]
     if not response.ok: 
         print(response.status_code, response.text)
@@ -44,7 +46,8 @@ def check_dsc_is_in_trustlist():
 
 @step("check that DSC is not in trustlist")
 def check_that_dsc_is_not_in_trustlist():
-    get_complete_trustlist()
+    #get_complete_trustlist()
+    get_the_trustlist_with_the_type('DSC')
     response = data_store.scenario["response"]
     assert response.ok, "Coudn't get trustlist"
     data = response.json()
