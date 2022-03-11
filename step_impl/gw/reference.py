@@ -96,7 +96,7 @@ def is_reference_in_trustlist():
 @step("<country> deletes uploaded reference")
 def deletes_uploaded_reference(country):
     body = json.dumps({'uuid': str(data_store.scenario["trusted.reference.uuid"])})
-    print(f'\nDEBUG: Attempt deleting {body}\n')
+    #print(f'\nDEBUG: Attempt deleting {body}\n')
     data = sign(bytes(body, 'utf-8'), country).decode('utf-8')
     url = data_store.scenario["gateway.url"] + '/trust/reference'
     response = _generic_upload_of_data_by_country(url, data, country, delete=True)

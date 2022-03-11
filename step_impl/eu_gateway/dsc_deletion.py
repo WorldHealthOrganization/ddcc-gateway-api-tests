@@ -20,14 +20,14 @@ import requests
 from cryptography.hazmat.primitives import serialization
 from getgauge.python import data_store, step
 from requests import Response
-from step_impl.util import authCerts, eu_gateway_url, certificateFolder, FailedResponse
+from step_impl.util import authCerts, eu_gateway_url, certificateFolder, FailedResponse, verify
 from requests.exceptions import SSLError
 
 def delete_dsc(signedDsc: str, authCerts: (str, str)):
     headers = {"Content-Type": "application/cms",
                "Content-Transfer-Encoding": "base64"}
     response = requests.delete(
-        url=eu_gateway_url + "/signerCertificate", data=signedDsc, headers=headers, cert=authCerts)
+        url=eu_gateway_url + "/signerCertificate", data=signedDsc, headers=headers, cert=authCerts, verify=verify)
     return response
 
 
@@ -44,7 +44,7 @@ def delete_dsc_created_using_alias_endpoint():
     headers = {"Content-Type": "application/cms",
                "Content-Transfer-Encoding": "base64"}
     response = requests.post(
-        url=eu_gateway_url + "/signerCertificate/delete", data=signedDsc, headers=headers, cert=authCerts)
+        url=eu_gateway_url + "/signerCertificate/delete", data=signedDsc, headers=headers, cert=authCerts, verify=verify)
     data_store.scenario["response"] = response
 
 

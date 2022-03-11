@@ -24,7 +24,7 @@ from requests import Response
 from cryptography.x509 import Certificate
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 
-from step_impl.util import eu_gateway_url, certificateFolder, FailedResponse
+from step_impl.util import eu_gateway_url, certificateFolder, FailedResponse, verify
 from step_impl.util.rules import delete_rule_by_id
 from step_impl.util.certificates import create_cms, get_own_country_name
 from requests.exceptions import SSLError
@@ -64,7 +64,7 @@ def delete_rule_using_alias_endpoint():
     key_location = path.join(certificateFolder, "key_auth.pem")
     headers = {"Content-Type": "application/cms-text",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.post(url=eu_gateway_url + "/rules/delete",
+    response = requests.post(url=eu_gateway_url + "/rules/delete", verify=verify,
                                data=data, headers=headers, cert=(cert_location, key_location))
     data_store.scenario["response"] = response
 

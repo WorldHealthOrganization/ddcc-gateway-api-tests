@@ -24,13 +24,15 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.x509.oid import NameOID
 from getgauge.python import data_store, step
 from requests import Response
-from step_impl.util import eu_gateway_url, certificateFolder
+from step_impl.util import eu_gateway_url, certificateFolder, verify
 
 
 @step("check that DSC is in trustlist")
 def check_dsc_is_in_trustlist():
     get_complete_trustlist();
     response = data_store.scenario["response"]
+    if not response.ok: 
+        print(response.status_code, response.text)
     assert response.ok, "Coudn't get trustlist"
     data = response.json()
     certs_in_trustlist = [x["rawData"] for x in data]
@@ -54,7 +56,7 @@ def check_that_dsc_is_not_in_trustlist():
 
 @step("get complete trustlist")
 def get_complete_trustlist():
-    response = requests.get(eu_gateway_url + "/trustList", cert=(
+    response = requests.get(eu_gateway_url + "/trustList", verify=verify, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 
@@ -68,7 +70,7 @@ def check_that_created_keys_are_in_trustlist():
 
 @step("get the trustList with the type <type>")
 def get_the_trustlist_with_the_type(type):
-    response = requests.get(eu_gateway_url + f"/trustList/{type}", cert=(
+    response = requests.get(eu_gateway_url + f"/trustList/{type}", verify=verify, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 
@@ -83,7 +85,7 @@ def check_that_only_entries_of_the_type_are_present(type):
 
 @step("get the trustList with the type <type> and country <country>")
 def get_the_trustlist_with_the_type_and_country(type, country):
-    response = requests.get(eu_gateway_url + f"/trustList/{type}/{country}", cert=(
+    response = requests.get(eu_gateway_url + f"/trustList/{type}/{country}", verify=verify, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 

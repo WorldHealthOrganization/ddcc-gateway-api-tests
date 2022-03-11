@@ -18,7 +18,7 @@ from os import path
 import requests
 from getgauge.python import data_store, step
 from requests import Response
-from step_impl.util import eu_gateway_url, certificateFolder, jrc_url
+from step_impl.util import eu_gateway_url, certificateFolder, jrc_url, verify
 from requests.exceptions import SSLError
 
 class FailedResponse:
@@ -29,7 +29,7 @@ class FailedResponse:
 
 @step("get all valuesets IDs")
 def get_all_valuesets():
-    response = requests.get(eu_gateway_url + f"/valuesets", cert=(
+    response = requests.get(eu_gateway_url + f"/valuesets", verify=verify, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
     data_store.scenario["response"] = response
 
@@ -47,7 +47,7 @@ def get_all_valuesets_with_custom_certificate():
     data_store.scenario["response"] = response
 
 def get_valueset_by_id(valuesetId):
-    return requests.get(eu_gateway_url + f"/valuesets/{valuesetId}", cert=(
+    return requests.get(eu_gateway_url + f"/valuesets/{valuesetId}", verify=verify, cert=(
         path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem")))
 @step("get details of first Valueset in list")
 def get_details_of_first_valueset_in_list():

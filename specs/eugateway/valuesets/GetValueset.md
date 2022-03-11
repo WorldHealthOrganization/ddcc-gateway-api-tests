@@ -41,6 +41,7 @@ Use an NBTLS to try to authenticate when downloading the Valuesets
 
 The National Backend should update the RAT Valuesets from the JRC database.
 
+* skip: this is not relevant for WHO branch
 * get RAT Valuesets from JRC database
 * get RAT Valuesets from Gateway
 * check that RAT Valuesets from JRC database and Gateway match

@@ -10,12 +10,12 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 from cryptography.x509 import Certificate
 from requests import Response
-from step_impl.util import eu_gateway_url, certificateFolder
+from step_impl.util import eu_gateway_url, certificateFolder, verify
 from step_impl.util.certificates import create_cms
 
 
 def download_rule_of_country(country: str, cert_location: str, key_location: str) -> Response:
-    return requests.get(url=eu_gateway_url + f"/rules/{country}", cert=(
+    return requests.get(url=eu_gateway_url + f"/rules/{country}", verify=verify, cert=(
         cert_location, key_location))
 
 
@@ -38,7 +38,7 @@ def delete_rule_by_id(ruleId: str, upload_cert: Certificate, upload_key: RSAPriv
     data = create_cms(ruleId.encode("utf-8"), upload_cert, upload_key)
     headers = {"Content-Type": "application/cms-text",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.delete(url=eu_gateway_url + "/rules",
+    response = requests.delete(url=eu_gateway_url + "/rules", verify=verify,
                                data=data, headers=headers, cert=(tls_cert_location, tls_key_location))
     return response
 
@@ -53,6 +53,6 @@ def delete_rule_by_id_with_base_data(ruleId: str) -> Response:
     data = create_cms(ruleId.encode('utf-8'), upload_cert, upload_key)
     headers = {"Content-Type": "application/cms-text",
                "Content-Transfer-Encoding": "base64"}
-    response = requests.delete(url=eu_gateway_url + "/rules",
+    response = requests.delete(url=eu_gateway_url + "/rules", verify=verify,
                                data=data, headers=headers, cert=(tls_cert_location, tls_key_location))
     return response
