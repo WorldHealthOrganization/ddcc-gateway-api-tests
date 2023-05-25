@@ -37,6 +37,13 @@ def check_that_the_response_had_the_status_code(expected):
     assert status_code == int(
         expected), f"response status code was {status_code} but expected {expected}"
 
+@step("check that the response status code is in group <expected>")
+def check_that_the_response_status_code_is_in_group(expected):
+    response = data_store.scenario["response"]
+    status_code =  str(response.status_code)
+    assert status_code[0] == expected[0], f"response status code was {status_code} but expected {expected}"
+
+
 @step("check that the response had the status code <int> or None")
 def check_that_the_response_had_the_status_code(expected):
     response = data_store.scenario["response"]
