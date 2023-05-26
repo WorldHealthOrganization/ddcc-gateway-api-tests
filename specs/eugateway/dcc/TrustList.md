@@ -1,4 +1,4 @@
-# Get trustlist
+# TrustList download
 
 tags: DGC_GW
 
@@ -6,9 +6,9 @@ all test cases for getting the DSC (Signing Certificates)
 
    |type  |country|
    |------|-------|
-   |CSCA  |DE     |
-   |UPLOAD|DE     |
-   |DSC   |DE     |
+   |CSCA  |XA     |
+   |UPLOAD|XA     |
+   |DSC   |XA     |
 
 ## get the complete trustlist
 * get complete trustlist
