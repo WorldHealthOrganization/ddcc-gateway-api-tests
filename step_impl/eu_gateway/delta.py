@@ -21,9 +21,16 @@ def do_paginated_trust_list_download(path, size):
     hashlist = []
     data_store.scenario['hashbuffer.trustlist'].append(hashlist)
 
+    recent_page_hash = None
     for page in range(_max_pages): 
         url = path + f"?page={page}&pagesize={size}"
-        response = requests.get(url=url, cert=auth)        
+        response = requests.get(url=url, cert=auth)
+        if recent_page_hash is None: 
+            recent_page_hash = sha256(response.content).digest()
+        else:
+            page_hash = sha256(response.content).digest()
+            assert page_hash != recent_page_hash, 'Pagination not working'
+            recent_page_hash = page_hash
         assert response.ok, "Failed to load trustList: {url} -> {response.status_code}"
         entries = response.json()
 

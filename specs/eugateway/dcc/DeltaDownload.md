@@ -2,7 +2,7 @@
 
 * prepare trust list hash buffer for comparison
 
-Test data for DSC download: 
+Test data for trust list download: 
    |type  |country|
    |------|-------|
    |CSCA  |XA     |
@@ -15,8 +15,8 @@ Load the full trust list in different paginations.
 Finally, compare the downloaded lists and check that they have the same content.
 
 * Reference "TXR-6359"
+* load unfiltered trust list with pagination size "10"
 * load unfiltered trust list with pagination size "50"
-* load unfiltered trust list with pagination size "80"
 * compare downloaded trust lists
 
 ## Pagination trust list by type
@@ -25,8 +25,8 @@ Load the trust list filtered by type in different paginations.
 Finally, compare the downloaded lists and check that they have the same content.
 
 * Reference "TXR-6423"
-* load <type> trust list with pagination size "10"
-* load <type> trust list with pagination size "20"
+* load <type> trust list with pagination size "2"
+* load <type> trust list with pagination size "5"
 * compare downloaded trust lists
 
 ## Pagination trust list by type and country
@@ -35,8 +35,8 @@ Load the trust list filtered by type and country in different paginations.
 Finally, compare the downloaded lists and check that they have the same content.
 
 * Reference "TXR-6429"
-* load <type> trust list of <country> with pagination size "10"
-* load <type> trust list of <country> with pagination size "20"
+* load <type> trust list of <country> with pagination size "1"
+* load <type> trust list of <country> with pagination size "2"
 * compare downloaded trust lists
 
 ## Date formats 
