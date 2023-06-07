@@ -18,6 +18,7 @@ from os import environ, getcwd, path
 from os.path import join
 
 eu_gateway_url = environ.get('eu_gateway_url')
+baseurl =  environ.get('eu_gateway_url')
 jrc_url = environ.get('jrc_url')
 
 first_gateway_url = environ.get('first_gateway_url')
@@ -27,6 +28,7 @@ third_gateway_url = environ.get('third_gateway_url')
 verify = bool(environ.get('verify_https'))
 
 certificateFolder = join(getcwd(), environ.get("certificatesFolder"))
+
 authCerts = (
     path.join(certificateFolder, "auth.pem"), path.join(certificateFolder, "key_auth.pem"))
 
