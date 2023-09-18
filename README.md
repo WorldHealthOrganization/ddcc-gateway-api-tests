@@ -23,8 +23,39 @@ Installation instructions:
 python -m pip install -r requirements.txt
 ```
 
+## Test data (onboarded virtual countries)
 
+The folder `certificates` should host the key material of the
+fictional countries that are used for testing. 
 
+The directory structure is as follows: 
+```
+certificates
+    +--- XXA                 (country XA)
+    |     +--- DDC           (domain DCC)
+    |     |     +--- TLS.pem
+    |     |     +--- TLS.key
+    |     |     +--- SCA.pem
+    |     |     +--- SCA.key
+    |     |     +--- UP.pem
+    |     |     +--- UP.key
+    |     +--- DIVOC         (possible other domain)
+    |           +--- TLS.pem
+    |           +--- ...
+    |
+    +--- XXB                 (country XB)
+          +--- DCC
+                +--- TLS.pem
+                +--- ...
+```
+
+## Usage
+
+A testing environment must be specified with each execution:
+
+```
+behave -D testenv=UAT 
+```
 
 ## Licensing
 
