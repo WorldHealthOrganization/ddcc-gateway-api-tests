@@ -1,35 +1,16 @@
 import os
-from cryptography.x509 import load_der_x509_certificate
-from cryptography.hazmat.primitives import serialization
 from base64 import b64decode
-from behave import when
+from behave import when, then
 from countries import Country
+from datetime import datetime, timedelta
+from cryptography import x509
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.serialization import pkcs7
+from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec
+from cryptography.x509.oid import NameOID
 
-def env_certs(ctype, country_code):
-    """return a tuple of certificate and key object from the environment variables
-       <type>_CERT_<country>  and  <type>_KEY_<country>
-    """
-
-    def require_env(variable_name):
-        value = os.environ.get(variable_name)
-        if value is None: 
-            raise ValueError(f'Environment variable not set: {variable_name}')
-        return value
-    
-    country = Country(country_code)
-    ctype = ctype.upper()
-    
-    cert_content = require_env(f'{ctype}_CERT_{country.alpha_3}')
-    cert_binary = b64decode(cert_content)
-    cert = load_der_x509_certificate(cert_binary)
-
-    key_content = require_env(f'{ctype}_KEY_{country.alpha_3}')
-    key_binary = b64decode(key_content)
-    key = serialization.load_der_private_key(key_binary, None)
-
-    return cert, key
-
-
+@then('the {domain} {ctype} certificate of {country_code} is used')
 @when('the {domain} {ctype} certificate of {country_code} is used')
 def step_impl(context, domain, ctype, country_code):
     #domain = domain.upper()
@@ -43,3 +24,66 @@ def step_impl(context, domain, ctype, country_code):
     for path in context.cert: 
         print('Working directory: ', os.getcwd())
         assert os.path.isfile(path), f'Not found: {path}'
+
+@when('an RSA key with {bitsize} bits is created')
+def step_impl(context, bitsize):
+    context.created_key = rsa.generate_private_key(public_exponent=65537, key_size=int(bitsize))
+
+@when('a DSA key with {bitsize} bits is created')
+def step_impl(context, bitsize):
+    context.created_key = dsa.generate_private_key(key_size=int(bitsize))
+
+@when('an EC key from curve {curve} is created')
+# curve examples: SECP256R1, SECP384R1, SECP521R1
+def step_impl(context, curve):
+    curve_object = getattr(ec, curve.upper() )()
+    context.created_key = ec.generate_private_key(curve_object)
+
+@then('country {country_code} is set in the certificate subject')
+def step_impl(context, country_code):
+    country = Country(country_code)
+    context.x509_subject = x509.Name([
+        x509.NameAttribute(NameOID.COUNTRY_NAME, country.alpha_2),
+        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "Somewhere"),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, "Someplace"),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Fictional Testing Company"),
+        x509.NameAttribute(NameOID.COMMON_NAME, f"Test Data {int(datetime.utcnow().timestamp())}"),
+    ])
+  
+@then('the created key and subject are being signed')
+# Requires cert attribute set by
+# 'the {domain} {ctype} certificate of {country_code} is used'
+def step_impl(context):
+    cert_path, key_path = context.cert
+    with open(cert_path,'rb') as cert_file:
+        signing_cert = load_pem_x509_certificate(cert_file.read())
+    with open(key_path,'rb') as key_file:
+        signing_key = serialization.load_pem_private_key(key_file.read(),None)
+    
+    context.created_cert = x509.CertificateBuilder()\
+            .subject_name(context.x509_subject)\
+            .issuer_name(signing_cert.issuer)\
+            .public_key(context.created_key.public_key())\
+            .serial_number(x509.random_serial_number())\
+            .not_valid_before(datetime.utcnow())\
+            .not_valid_after(datetime.utcnow() + timedelta(days=1))\
+            .sign(signing_key, hashes.SHA256())    
+
+@then('the created cert is wrapped in a CMS message')
+# Requires cert attribute set by
+# 'the {domain} {ctype} certificate of {country_code} is used'
+def step_impl(context):
+    data = context.created_cert.public_bytes(serialization.Encoding.DER)
+    cert_path, key_path = context.cert
+    with open(cert_path,'rb') as cert_file:
+        cms_cert = load_pem_x509_certificate(cert_file.read())
+    with open(key_path,'rb') as key_file:
+        cms_key = serialization.load_pem_private_key(key_file.read(),None)
+
+    options = [pkcs7.PKCS7Options.Binary]
+
+    builder = pkcs7.PKCS7SignatureBuilder().set_data(data)
+    cms_bytes = builder.add_signer(cms_cert, cms_key, hash_algorithm=hashes.SHA256()).sign(
+        encoding=serialization.Encoding.DER, options=options)
+
+    context.created_cms = cms_bytes
