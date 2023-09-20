@@ -55,17 +55,16 @@ def _add_country(db, **params):
 
  
 
-def before_scenario(scenario, context): 
+def before_scenario(context, scenario): 
     '''Reset the following attributes of the context: 
-        - client_headers 
         - cleanups
     '''
-    context.client_headers = {}
     context.cleanups = []
 
-def after_scenario(scenario, context):
+def after_scenario(context, scenario):
     for cleanup_job in context.cleanups: 
         try: 
             cleanup_job['callback'](**cleanup_job['args'])
+            print(f'Completed cleanup: {cleanup_job["name"]}')
         except Exception as ex: 
             warnings.warn(f'Error during cleanup of "{cleanup_job.get("name")}": {ex}')

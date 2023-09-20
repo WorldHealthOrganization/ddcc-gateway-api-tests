@@ -9,4 +9,4 @@ Scenario Outline: Onboarded Countries
     Examples: Onboarded countries
     | country |
     |  XXA    |
-    |  XXB    |
+    |  XB     |

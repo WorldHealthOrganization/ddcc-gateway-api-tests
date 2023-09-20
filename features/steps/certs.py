@@ -1,6 +1,6 @@
 import os
 from base64 import b64decode
-from behave import when, then
+from behave import *
 from countries import Country
 from datetime import datetime, timedelta
 from cryptography import x509
@@ -10,8 +10,7 @@ from cryptography.hazmat.primitives.serialization import pkcs7
 from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec
 from cryptography.x509.oid import NameOID
 
-@then('the {domain} {ctype} certificate of {country_code} is used')
-@when('the {domain} {ctype} certificate of {country_code} is used')
+@step('the {domain} {ctype} certificate of {country_code} is used')
 def step_impl(context, domain, ctype, country_code):
     #domain = domain.upper()
     ctype = ctype.upper()
@@ -39,7 +38,7 @@ def step_impl(context, curve):
     curve_object = getattr(ec, curve.upper() )()
     context.created_key = ec.generate_private_key(curve_object)
 
-@then('country {country_code} is set in the certificate subject')
+@step('country {country_code} is set in the certificate subject')
 def step_impl(context, country_code):
     country = Country(country_code)
     context.x509_subject = x509.Name([
@@ -50,7 +49,7 @@ def step_impl(context, country_code):
         x509.NameAttribute(NameOID.COMMON_NAME, f"Test Data {int(datetime.utcnow().timestamp())}"),
     ])
   
-@then('the created key and subject are being signed')
+@step('the created key and subject are being signed')
 # Requires cert attribute set by
 # 'the {domain} {ctype} certificate of {country_code} is used'
 def step_impl(context):
@@ -69,7 +68,7 @@ def step_impl(context):
             .not_valid_after(datetime.utcnow() + timedelta(days=1))\
             .sign(signing_key, hashes.SHA256())    
 
-@then('the created cert is wrapped in a CMS message')
+@step('the created cert is wrapped in a CMS message')
 # Requires cert attribute set by
 # 'the {domain} {ctype} certificate of {country_code} is used'
 def step_impl(context):
@@ -87,3 +86,11 @@ def step_impl(context):
         encoding=serialization.Encoding.DER, options=options)
 
     context.created_cms = cms_bytes
+
+@step('set the created certificate as the default')
+def step_impl(context):
+    context.default_cert = context.created_cert
+
+@step('the default certificate is used')
+def step_impl(context):
+    context.created_cert = context.default_cert
