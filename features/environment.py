@@ -12,19 +12,12 @@ def before_all(context):
         raise ValueError('''
             ERROR: Testing environment not set. 
             Please use -D testenv=<testenv> to define the target.
-            Possible values are: LOCAL, DEV, UAT, or a custom URL
+            Possible values are defined in "testing_environments.json"
                          ''')
     
-    if cfg.userdata.get('testenv').upper() == 'LOCAL':
-        context.base_url = 'https://localhost:8443'
-    elif cfg.userdata.get('testenv').upper() == 'DEV':
-        context.base_url = 'https://tng-dev.who.int'
-    elif cfg.userdata.get('testenv').upper() == 'UAT':
-        context.base_url = 'https://tng-uat.who.int'
-    elif cfg.userdata.get('testenv').startswith('http'):
-        context.base_url = cfg.userdata.get('testenv')
-    else:
-        raise ValueError('Invalid testenv')
+    testenv = json.load(open(os.path.join('features','testing_environments.json'))).get(cfg.userdata.get('testenv'))
+    context.base_url = testenv.get('base_url')
+    context.testenv = testenv
     
     # Patch testing countries into pycountry: 
     try:

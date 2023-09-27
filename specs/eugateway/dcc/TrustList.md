@@ -1,5 +1,7 @@
 # TrustList download
 
+STATUS: Migrated to gherkin `trustlist.feature`
+
 tags: DGC_GW
 
 all test cases for getting the DSC (Signing Certificates)

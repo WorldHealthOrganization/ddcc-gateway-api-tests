@@ -1,0 +1,26 @@
+{
+    "UAT": {
+        "base_url" : "https://tng-uat.who.int",
+        "CountryA" : "XXA",
+        "CountryB" : "XXB",
+        "CountryC" : "XXC"
+    },
+    "UAT-reverse": {
+        "base_url" : "https://tng-uat.who.int",
+        "CountryA" : "XXB",
+        "CountryB" : "XXA",
+        "CountryC" : "XXC"
+    },
+    "DEV": {
+        "base_url" : "https://tng-dev.who.int",
+        "CountryA" : "XXA",
+        "CountryB" : "XXB",
+        "CountryC" : "XXC"
+    },
+    "EXAMPLE": {
+        "base_url" : "https://example-environment.service.tld",
+        "CountryA" : "GER",
+        "CountryB" : "BEL",
+        "CountryC" : "IT"
+    }
+}
