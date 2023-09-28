@@ -10,11 +10,11 @@ from cryptography.hazmat.primitives.serialization import pkcs7
 from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec
 from cryptography.x509.oid import NameOID
 
-@step('the {domain} {ctype} certificate of {country_code} is used')
+@step('the {domain} {ctype} certificate of country {country_code} is used')
 def step_impl(context, domain, ctype, country_code):
     #domain = domain.upper()
     ctype = ctype.upper()
-    country = Country(country_code)
+    country = Country(context, country_code)
 
     context.cert = ( os.path.join('certificates', country.alpha_3, domain, f'{ctype}.pem'),
                      os.path.join('certificates', country.alpha_3, domain, f'{ctype}.key'),
@@ -40,7 +40,7 @@ def step_impl(context, curve):
 
 @step('country {country_code} is set in the certificate subject')
 def step_impl(context, country_code):
-    country = Country(country_code)
+    country = Country(context, country_code)
     context.x509_subject = x509.Name([
         x509.NameAttribute(NameOID.COUNTRY_NAME, country.alpha_2),
         x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "Somewhere"),

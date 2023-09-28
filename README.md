@@ -23,12 +23,64 @@ Installation instructions:
 python -m pip install -r requirements.txt
 ```
 
-## Test data (onboarded virtual countries)
+## Usage
+
+A testing environment must be specified with each execution:
+
+```
+behave -D testenv=UAT 
+```
+
+The test cases will then look into the corresponding folders for testing certificates.
+For the countries which are set as country A and country B, these certificates must 
+be onboarded on the respective testing environment.
+
+### Testing environments 
+
+A testing environment definition currently consists of 
+ - an endpoint
+ - three roles, representing a country's software client. 
+      - The countries are aliased A, B and C.
+      - A and B are onboarded countries
+      - C is not onboarded and used for negative tests
+
+The environments are defined in the file `features/testing_environments.json`. 
+
+Example: 
+```
+    "UAT": {
+        "base_url" : "https://tng-uat.who.int",
+        "country_A" : "XXA",
+        "country_B" : "XXB",
+        "country_C" : "XXC"
+    },
+    "Scandinavia": {
+        "base_url" : "https://virtual.scandinavia.test",
+        "country_A" : "FIN",
+        "country_B" : "SWE",
+        "country_C" : "NOR"
+    }
+```
+### Virtual countries 
+
+Some environments do not want to use real country codes. 
+In order for them to function, non-existent (virtual) countries 
+must be defined in `features/testing_countries.json`.
+
+There, they must be assigned a unique 2-letter and 3-letter country
+code which must not already be used by an existing country.
+
+
+### Test data (onboarded virtual countries)
 
 The folder `certificates` should host the key material of the
 fictional countries that are used for testing. 
 
 The directory structure is as follows: 
+ - top level: 3-letter country code
+ - 2nd level: domain
+
+Example: 
 ```
 certificates
     +--- XXA                 (country XA)
@@ -47,14 +99,6 @@ certificates
           +--- DCC
                 +--- TLS.pem
                 +--- ...
-```
-
-## Usage
-
-A testing environment must be specified with each execution:
-
-```
-behave -D testenv=UAT 
 ```
 
 ## Licensing

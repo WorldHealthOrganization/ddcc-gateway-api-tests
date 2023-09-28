@@ -1,26 +1,26 @@
 {
     "UAT": {
         "base_url" : "https://tng-uat.who.int",
-        "CountryA" : "XXA",
-        "CountryB" : "XXB",
-        "CountryC" : "XXC"
+        "country_A" : "XXA",
+        "country_B" : "XXB",
+        "country_C" : "XXC"
     },
     "UAT-reverse": {
         "base_url" : "https://tng-uat.who.int",
-        "CountryA" : "XXB",
-        "CountryB" : "XXA",
-        "CountryC" : "XXC"
+        "country_A" : "XXB",
+        "country_B" : "XXA",
+        "country_C" : "XXC"
     },
     "DEV": {
         "base_url" : "https://tng-dev.who.int",
-        "CountryA" : "XXA",
-        "CountryB" : "XXB",
-        "CountryC" : "XXC"
+        "country_A" : "XXA",
+        "country_B" : "XXB",
+        "country_C" : "XXC"
     },
     "EXAMPLE": {
         "base_url" : "https://example-environment.service.tld",
-        "CountryA" : "GER",
-        "CountryB" : "BEL",
-        "CountryC" : "IT"
+        "country_A" : "GER",
+        "country_B" : "BEL",
+        "country_C" : "IT"
     }
 }

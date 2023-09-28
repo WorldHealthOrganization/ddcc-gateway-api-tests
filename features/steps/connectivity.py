@@ -6,7 +6,6 @@ import requests
 def step_impl(context, path):
     context.response = requests.get(f'{context.base_url}{path}', cert=context.cert)
 
-
 @step('the response should be OK')
 def step_impl(context):
     assert context.response.ok, 'The response was not OK'

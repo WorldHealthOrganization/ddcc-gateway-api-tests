@@ -3,6 +3,7 @@ import pycountry
 import json
 import warnings
 import os
+from steps.countries import Country
 
 def before_all(context):    
     cfg = context.config
@@ -14,10 +15,12 @@ def before_all(context):
             Please use -D testenv=<testenv> to define the target.
             Possible values are defined in "testing_environments.json"
                          ''')
-    
-    testenv = json.load(open(os.path.join('features','testing_environments.json'))).get(cfg.userdata.get('testenv'))
+    # Allow test environment keys to be case insensitive
+    ucase_json = { k.upper() : v for (k,v) in json.load(open(os.path.join('features','testing_environments.json'))).items() }
+    testenv = ucase_json.get(cfg.userdata.get('testenv').upper())
     context.base_url = testenv.get('base_url')
     context.testenv = testenv
+
     
     # Patch testing countries into pycountry: 
     try:
