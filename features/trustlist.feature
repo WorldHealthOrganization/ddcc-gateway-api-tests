@@ -6,7 +6,7 @@ of other parties so that I can trust their signatures.
 I want to be able to filter by different criteria, so that I only
 need to load relevant information
 
-Scenario Outline: Filter trust list by type
+Scenario Outline: Filter EU trust list by type
     Given that country A is onboarded
     When the DCC TLS certificate of country A is used
     And the path "/trustList/<cert_type>" is queried
@@ -19,7 +19,7 @@ Scenario Outline: Filter trust list by type
     |  UPLOAD   |
     |   CSCA    | 
 
-Scenario Outline: Filter trust list by type and country
+Scenario Outline: Filter EU trust list by type and country
     Given that country A is onboarded
     When the DCC TLS certificate of country A is used
     And the trust list for <cert_type> and <country> is queried
