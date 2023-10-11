@@ -36,7 +36,9 @@ def step_impl(context):
 
     trust_list = context.response.json()
     for cert_info in trust_list:
-        if cert_info.get('rawData') == created_cert_b64:
+        # EU trust list uses 'rawData' key, WHO trust list uses 'certificate' key
+        if cert_info.get('rawData') == created_cert_b64 \
+        or cert_info.get('certificate') == created_cert_b64:
             return 
         
     assert False, 'Created cert not found in trust list'
@@ -48,5 +50,7 @@ def step_impl(context):
 
     trust_list = context.response.json()
     for cert_info in trust_list:
-        if cert_info.get('rawData') == created_cert_b64:
+        # EU trust list uses 'rawData' key, WHO trust list uses 'certificate' key
+        if cert_info.get('rawData') == created_cert_b64\
+        or cert_info.get('certificate') == created_cert_b64:
             assert False, 'Created cert unexpectedly found in trust list'

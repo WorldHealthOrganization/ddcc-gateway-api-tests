@@ -1,5 +1,5 @@
 import os
-from base64 import b64decode
+from base64 import b64decode, b64encode
 from behave import *
 from countries import Country
 from datetime import datetime, timedelta
@@ -86,6 +86,17 @@ def step_impl(context):
         encoding=serialization.Encoding.DER, options=options)
 
     context.created_cms = cms_bytes
+
+@step('the CMS is wrapped in a JSON object')
+def step_impl(context):
+    context.json_object = {
+        'cms' : str(b64encode(context.created_cms),'utf-8'),
+        'properties' : {}
+    }
+
+@step('the JSON {attr} attribute is set to {value}')
+def step_impl(context, attr, value):
+    context.json_object[attr] = value
 
 @step('set the created certificate as the default')
 def step_impl(context):

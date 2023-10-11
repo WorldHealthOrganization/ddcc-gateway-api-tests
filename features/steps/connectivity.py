@@ -8,6 +8,8 @@ def step_impl(context, path):
 
 @step('the response should be OK')
 def step_impl(context):
+    if not context.response.ok: 
+        print(context.response.status_code, context.response.text)
     assert context.response.ok, 'The response was not OK'
 
 @step('the response status code should be {status_code}')
