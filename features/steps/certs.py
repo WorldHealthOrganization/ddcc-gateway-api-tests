@@ -1,6 +1,7 @@
 import os
 from base64 import b64decode, b64encode
 from behave import *
+from hashlib import sha256
 from countries import Country
 from datetime import datetime, timedelta
 from cryptography import x509
@@ -21,7 +22,7 @@ def step_impl(context, domain, ctype, country_code):
                     )    # env_certs(ctype, country) 
     
     for path in context.cert: 
-        print('Working directory: ', os.getcwd())
+        #print('Working directory: ', os.getcwd())
         assert os.path.isfile(path), f'Not found: {path}'
 
 @when('an RSA key with {bitsize} bits is created')
@@ -97,6 +98,13 @@ def step_impl(context):
 @step('the JSON {attr} attribute is set to {value}')
 def step_impl(context, attr, value):
     context.json_object[attr] = value
+
+@step('the JSON kid attribute is derived from the cert hash')
+def step_impl(context):
+    cert_fingerprint = sha256(context.created_cert.public_bytes(serialization.Encoding.DER)).digest()
+    context.json_object['kid'] = str(b64encode(cert_fingerprint[:8]),'utf-8')
+    print(f"KID = {context.json_object['kid']}")
+
 
 @step('set the created certificate as the default')
 def step_impl(context):
