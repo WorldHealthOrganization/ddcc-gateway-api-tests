@@ -1,5 +1,6 @@
 # Get Valueset
 
+Status: migrated to features/valuesets.feature
 tags: DGC_GW, Valueset
 
 All tests to check the download of Valuesets

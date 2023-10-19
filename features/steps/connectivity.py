@@ -24,3 +24,10 @@ def step_impl(context, status_code):
         assert context.response.status_code == int(status_code), \
             f"Got status code {context.response.status_code} but expected {status_code}"
 
+@step('the result list should contain {lookup_string}')
+def step_impl(context, lookup_string):
+    assert lookup_string in context.response.json()
+
+@step('the result list should have at least {number} entries')
+def step_impl(context, number):
+    assert len(context.response.json()) > int(number)
