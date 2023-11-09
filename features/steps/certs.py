@@ -113,3 +113,9 @@ def step_impl(context):
 @step('the default certificate is used')
 def step_impl(context):
     context.created_cert = context.default_cert
+
+@step('the trust anchor is loaded from the environment config')
+def step_impl(context):
+    
+    context.trust_anchor_public_key = serialization.load_pem_public_key(
+        bytes(f"-----BEGIN PUBLIC KEY-----\n{context.testenv.get('trust_anchor')}\n-----END PUBLIC KEY-----",'utf-8'))

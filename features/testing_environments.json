@@ -3,24 +3,28 @@
         "base_url" : "https://tng-uat.who.int",
         "country_A" : "XXA",
         "country_B" : "XXB",
-        "country_C" : "XXC"
+        "country_C" : "XXC",
+        "trust_anchor" : "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx7PrnCQjlEfjOmCaFRGn0uJgRK1L8WOxBr18i6qcBATg4WQ/K0+fVxKwwBRBJpq5EuBH8T88O0RnhaabgWCbgA=="
     },
     "UAT-reverse": {
         "base_url" : "https://tng-uat.who.int",
         "country_A" : "XXB",
         "country_B" : "XXA",
-        "country_C" : "XXC"
+        "country_C" : "XXC", 
+        "trust_anchor" : "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx7PrnCQjlEfjOmCaFRGn0uJgRK1L8WOxBr18i6qcBATg4WQ/K0+fVxKwwBRBJpq5EuBH8T88O0RnhaabgWCbgA=="
     },
     "DEV": {
         "base_url" : "https://tng-dev.who.int",
         "country_A" : "XXA",
         "country_B" : "XXB",
-        "country_C" : "XXC"
+        "country_C" : "XXC",
+        "trust_anchor" : "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQ/as/2KsCBbXg0AAw0VBg6Y+GkOS prxUQY/NN4HdtG7y5lIgJuNzCCvTPwz1mbiVi64oSwYxBX3LZ2q5pC/YSg=="
     },
     "EXAMPLE": {
         "base_url" : "https://example-environment.service.tld",
         "country_A" : "GER",
         "country_B" : "BEL",
-        "country_C" : "IT"
+        "country_C" : "IT",
+        "trust_anchor" : "trust anchor public key"
     }
 }
