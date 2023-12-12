@@ -5,13 +5,12 @@ from cryptography import x509
 from cryptography.x509.oid import NameOID
 from behave import *
 from requests import Response
-from datetime import datetime
+from datetime import datetime, timedelta
 from requests.exceptions import SSLError
 from steps.util import FailedResponse, certificates
 from countries import Country
 from steps.util.certificates import get_own_country_name
-from steps.util.rules import (download_rule_of_country,
-                                  get_rules_from_rulelist)
+from steps.util.rules import get_rules_from_rulelist
 
 @step("check that country {country_code} {is_or_not} in onboared countries list")
 def step_impl(context, country_code, is_or_not):
@@ -54,15 +53,38 @@ def step_impl(context):
     context.rule = rule
 
 
-@step("get Rules of own Country")
+@step("the rules of country {country_code} are downloaded")
+def step_impl(context, country_code ):
+    country = Country(context, country_code)
+    context.response = requests.get(f'{context.base_url}/rules/{country.alpha_2}', cert=context.cert)
+
+    if context.response.ok:
+        ruleList = context.response.json()
+        context.downloaded_rules = get_rules_from_rulelist(ruleList)
+        
+
+@step("the re-downloaded rule {exist_or_not} in version {version}")
+def step_impl(context, exist_or_not, version):
+    exist_or_not = exist_or_not.lower()
+    print('Downloaded Rules:', [ (rule.get('Identifier'), rule.get('Version')) for rule in context.downloaded_rules ])
+
+    re_dl_rule = [ rule for rule in context.downloaded_rules \
+            if rule['Identifier'] == context.rule['Identifier'] and rule['Version'] == version]
+
+    if exist_or_not in ['exists']:
+        assert len(re_dl_rule) >= 1, f'Uploaded rule not found in version {version}'
+    elif exist_or_not in ["doesn't exist", "does not exist"]: 
+        assert len(re_dl_rule) == 0, f'Uploaded rule found in version {version}'
+    else: 
+        raise ValueError('verb must be exists or does not exist')
+
+
+
+@step("both versions of the rule exist")
 def step_impl(context):
-    countryName = get_own_country_name()
-    cert_location = path.join("certificates", "XXC", "DCC", "TLS.pem")
-    key_location = path.join("certificates", "XXC", "DCC", "TLS.key")
-    response = download_rule_of_country(
-        countryName, cert_location, key_location)
-    context.response = response
-    if response.ok:
-        ruleList = response.json()
-        rules = get_rules_from_rulelist(ruleList)
-        context.rule = rules
+    re_dl_rule = [ rule for rule in context.downloaded_rules \
+                    if rule['Identifier'] == context.rule['Identifier']]
+    print('Downloaded Rules:', [ (rule.get('Identifier'), rule.get('Version')) for rule in context.downloaded_rules ])
+    assert len(re_dl_rule) >= 2, 'At least two rule version were expected'
+
+

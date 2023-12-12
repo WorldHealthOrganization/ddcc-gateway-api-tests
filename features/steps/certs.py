@@ -1,4 +1,5 @@
 import os
+import json
 from base64 import b64decode, b64encode
 from behave import *
 from hashlib import sha256
@@ -10,6 +11,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.serialization import pkcs7
 from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec
 from cryptography.x509.oid import NameOID
+from util.json import DateTimeEncoder
 
 @step('the {domain} {ctype} certificate of country {country_code} is used')
 def step_impl(context, domain, ctype, country_code):
@@ -69,11 +71,18 @@ def step_impl(context):
             .not_valid_after(datetime.utcnow() + timedelta(days=1))\
             .sign(signing_key, hashes.SHA256())    
 
-@step('the created cert is wrapped in a CMS message')
+@step('the created {itemtype} is wrapped in a CMS message')
 # Requires cert attribute set by
 # 'the {domain} {ctype} certificate of {country_code} is used'
-def step_impl(context):
-    data = context.created_cert.public_bytes(serialization.Encoding.DER)
+def step_impl(context, itemtype):
+    if itemtype.lower() in ['cert', 'certificate']:
+        data = context.created_cert.public_bytes(serialization.Encoding.DER)
+    elif itemtype.lower() == 'rule': 
+        data = bytes( json.dumps(context.rule, cls=DateTimeEncoder ), 'utf-8' )
+        #print(context.rule)
+    else: 
+        raise ValueError('Item type must be "cert" or "rule" ')
+
     cert_path, key_path = context.cert
     with open(cert_path,'rb') as cert_file:
         cms_cert = load_pem_x509_certificate(cert_file.read())
@@ -113,3 +122,9 @@ def step_impl(context):
 @step('the default certificate is used')
 def step_impl(context):
     context.created_cert = context.default_cert
+
+@step('the trust anchor is loaded from the environment config')
+def step_impl(context):
+    
+    context.trust_anchor_public_key = serialization.load_pem_public_key(
+        bytes(f"-----BEGIN PUBLIC KEY-----\n{context.testenv.get('trust_anchor')}\n-----END PUBLIC KEY-----",'utf-8'))

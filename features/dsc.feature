@@ -59,7 +59,19 @@ Scenario: Country B can see DSCs uploaded by Country A
     And the path "/trustList" is queried
     Then the created cert is found in the trust list
 
-Scenario: Country B CANNOT upload DSCs created by Country A
+Scenario: Unauthorized country cannot upload a certificate
+    When an EC key from curve SECP256R1 is created
+    And country C is set in the certificate subject
+    And the DCC SCA certificate of country C is used
+    And the created key and subject are being signed
+    And the DCC UP certificate of country C is used
+    And the created cert is wrapped in a CMS message
+    And the DCC TLS certificate of country C is used
+    And the CMS is uploaded via the signerCertificate API
+    Then the response status code should be 4xx
+
+
+Scenario: Country B CANNOT upload DSCs created by Country A, signed by B
     Given the default certificate is used
     And the DCC UP certificate of country B is used
     And the created cert is wrapped in a CMS message

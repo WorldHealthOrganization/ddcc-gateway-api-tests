@@ -1,6 +1,6 @@
 from behave import * 
 import requests
-
+from time import sleep
 
 @step('the path "{path}" is queried')
 def step_impl(context, path):
@@ -31,3 +31,7 @@ def step_impl(context, lookup_string):
 @step('the result list should have at least {number} entries')
 def step_impl(context, number):
     assert len(context.response.json()) > int(number)
+
+@step('we wait for {seconds} seconds')
+def step_impl(context, seconds):
+    sleep(float(seconds))
