@@ -1,5 +1,5 @@
 <h1 align="center">
-   DDVC Gateway  API Tests
+   Trusted Network Gateway  API Tests
 </h1>
 
 ## General info and requirements
@@ -8,7 +8,7 @@ The test suite is based on the *Behave* framework, a Python implementation of *C
 Tests are written in *Gherkin*, a human-readable, behavior focussed syntax.
 
 Requirements: 
-- Python (https://gauge.org/) 3.9 or later
+- Python 3.9 or later
 
 Installation instructions: 
 
@@ -17,7 +17,7 @@ Installation instructions:
 - In the repository:
 ```
 # Optional: Create venv
-# python -m venv .venv --prompt DDVC
+# python -m venv .venv --prompt TNG-Tests
 # source .venv/bin/activate
 
 python -m pip install -r requirements.txt
@@ -84,14 +84,14 @@ Example:
 ```
 certificates
     +--- XXA                 (country XA)
-    |     +--- DDC           (domain DCC)
+    |     +--- DCC           (domain DCC)
     |     |     +--- TLS.pem
     |     |     +--- TLS.key
     |     |     +--- SCA.pem
     |     |     +--- SCA.key
     |     |     +--- UP.pem
     |     |     +--- UP.key
-    |     +--- DIVOC         (possible other domain)
+    |     +--- RACSEL-DDVC     (possible other domain)
     |           +--- TLS.pem
     |           +--- ...
     |
@@ -103,7 +103,7 @@ certificates
 
 ## Licensing
 
-Copyright (C) 2022 T-Systems International GmbH and all other contributors
+Copyright (C) 2023 T-Systems International GmbH and all other contributors
 
 Licensed under the **Apache License, Version 2.0** (the "License"); you may not use this file except in compliance with the License.
 
