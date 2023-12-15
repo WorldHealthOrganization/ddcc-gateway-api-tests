@@ -1,78 +1,109 @@
 <h1 align="center">
-   DDCC Gateway  API Tests
+   Trusted Network Gateway  API Tests
 </h1>
 
 ## General info and requirements
 
-The test suite is based on Gauge with a Python backend. The test cases are written in human readable language in the form of markdown
-files. Each headline marks a test case and each list element marks a test case step. Every test case step is linked to a function in
-python code which contains the definition of the test step. 
+The test suite is based on the *Behave* framework, a Python implementation of *Cucumber*. 
+Tests are written in *Gherkin*, a human-readable, behavior focussed syntax.
 
 Requirements: 
-- Gauge (https://gauge.org/) 1.3 or later
-- Python (https://gauge.org/) 3.9 or later
+- Python 3.9 or later
 
 Installation instructions: 
 
-- Install gauge and python
+- Install Python
 - Clone the repository
 - In the repository:
 ```
-pipenv install
-pipenv shell
+# Optional: Create venv
+# python -m venv .venv --prompt TNG-Tests
+# source .venv/bin/activate
+
+python -m pip install -r requirements.txt
 ```
 
-## Preparations
+## Usage
 
-The `certificates` folder holds the client certificates of the simulated national backends.
-<pre>
-Folder structure: 
- [certificates] 
-  + (client certs for EU test cases)
-  +--[secondCountry]
-  |   + (client certs for EU test cases, second country)
-  +--[CountryA]
-  |   + (client certs for WHO TNG test cases)
-  +--[CountryB]
-  |   + (client certs for WHO TNG test cases)
-  +--[CountryC]
-  |   + (client certs for WHO TNG test cases)
-  +--[OtherGateway]
-      + (client certs to simulate federated GW)
-</pre>
+A testing environment must be specified with each execution:
 
-In each folder (=for each test country), the following files are expected: 
-| file name                    | description                                                                             |
-| ---------------------------- | --------------------------------------------------------------------------------------- |
-| auth.pem                     | PEM encoded Authentication (NBTLS) certificate                                          |
-| key_auth.pem                 | PEM encoded private key of the Authentication (NBTLS) certificate                       |
-| csca.pem                     | PEM encoded CSCA (NBCSCA) certificate                                                   |
-| key_csca.pem                 | PEM encoded private key of CSCA (NBCSCA) certificate                                    |
-| upload.pem                   | PEM encoded Upload (NBUS) certificate                                                   |
-| key_upload.pem               | PEM encoded private key of Upload (NBUS) certificate                                    |
-| upload2.pem                   | PEM encoded 2nd Upload (NBUS) (Only for CMS Migration tests) certificate                                                   |
-| key_upload2.pem               | PEM encoded private key of 2nd Upload (NBUS) certificate                                    |
+```
+behave -D testenv=UAT 
+```
+
+The test cases will then look into the corresponding folders for testing certificates.
+For the countries which are set as country A and country B, these certificates must 
+be onboarded on the respective testing environment.
+
+### Testing environments 
+
+A testing environment definition currently consists of 
+ - an endpoint
+ - three roles, representing a country's software client. 
+      - The countries are aliased A, B and C.
+      - A and B are onboarded countries
+      - C is not onboarded and used for negative tests
+
+The environments are defined in the file `features/testing_environments.json`. 
+
+Example: 
+```
+    "UAT": {
+        "base_url" : "https://tng-uat.who.int",
+        "country_A" : "XXA",
+        "country_B" : "XXB",
+        "country_C" : "XXC"
+    },
+    "Scandinavia": {
+        "base_url" : "https://virtual.scandinavia.test",
+        "country_A" : "FIN",
+        "country_B" : "SWE",
+        "country_C" : "NOR"
+    }
+```
+### Virtual countries 
+
+Some environments do not want to use real country codes. 
+In order for them to function, non-existent (virtual) countries 
+must be defined in `features/testing_countries.json`.
+
+There, they must be assigned a unique 2-letter and 3-letter country
+code which must not already be used by an existing country.
 
 
-## Configuration
+### Test data (onboarded virtual countries)
 
-In order to run the tests multiple certificates are needed to create DSC certificates and to authenticate against the DGC-Gateway.
+The folder `certificates` should host the key material of the
+fictional countries that are used for testing. 
 
-Gauge supports multiple environments in which the configuration can change. 
-The DEV and the UAT environment of tng.who.int have been preconfigured. 
-To use them, add a `--env dev` or `--env uat` switch. 
+The directory structure is as follows: 
+ - top level: 3-letter country code
+ - 2nd level: domain
 
-                     |
-
-
-## Execution
-
-Gauge is used for the execution of the test cases. For this ```gauge run --env [dev|uat] specs/spec_file_or_folder``` is used to run the test cases against the local configuration. For more information on how the execution can be tweaked are in the [gauge documentation](https://docs.gauge.org/execution.htmlos=windows&language=python&ide=vscode#multiple-arguments-passed-to-gauge-run).
-
+Example: 
+```
+certificates
+    +--- XXA                 (country XA)
+    |     +--- DCC           (domain DCC)
+    |     |     +--- TLS.pem
+    |     |     +--- TLS.key
+    |     |     +--- SCA.pem
+    |     |     +--- SCA.key
+    |     |     +--- UP.pem
+    |     |     +--- UP.key
+    |     +--- RACSEL-DDVC     (possible other domain)
+    |           +--- TLS.pem
+    |           +--- ...
+    |
+    +--- XXB                 (country XB)
+          +--- DCC
+                +--- TLS.pem
+                +--- ...
+```
 
 ## Licensing
 
-Copyright (C) 2022 T-Systems International GmbH and all other contributors
+Copyright (C) 2023 T-Systems International GmbH and all other contributors
 
 Licensed under the **Apache License, Version 2.0** (the "License"); you may not use this file except in compliance with the License.
 

@@ -1,0 +1,9 @@
+Should contain one or more domain folders. 
+A domain folder could be DCC, DDCC, etc. 
+
+Inside a domain folder, there should be the files
+- TLS.pem, TLS.key
+- SCA.pem, SCA.key
+- UP.pem, UP2.pem*, UP.key, UP2.key* 
+
+*UP2 is only required for CMS migration feature
