@@ -4,7 +4,6 @@ from os import getcwd, path
 from cryptography import x509
 from cryptography.x509.oid import NameOID
 from behave import *
-from steps.util.certificates import get_own_country_name
 from countries import Country
 
 @step("create a valid {ruletype} Rule for country {country_code}")

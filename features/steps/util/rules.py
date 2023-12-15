@@ -2,17 +2,13 @@ import json
 from base64 import b64decode
 from os import path
 from typing import List
-
 import requests
 from countries import Country
 
 from asn1crypto.cms import ContentInfo
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
-from cryptography.x509 import Certificate
 from requests import Response
-#from steps.util import eu_gateway_url, certificateFolder, verify
 from steps.util.certificates import create_cms
 
 
@@ -48,17 +44,6 @@ def get_rules_from_rulelist(rulelist):
     return flat_rule_list
     #rulesCms = [rule[-1]["cms"] for rule in rulelist.values()]
     #return [get_rule_from_cms(b64decode(cms)) for cms in rulesCms]
-
-
-
-def delete_rule_by_id(ruleId: str, upload_cert: Certificate, upload_key: RSAPrivateKey, tls_cert_location: str, tls_key_location: str) -> Response:
-    data = create_cms(ruleId.encode("utf-8"), upload_cert, upload_key)
-    headers = {"Content-Type": "application/cms-text",
-               "Content-Transfer-Encoding": "base64"}
-    response = requests.delete(url=eu_gateway_url + "/rules", verify=verify,
-                               data=data, headers=headers, cert=(tls_cert_location, tls_key_location))
-    return response
-
 
 def delete_rule_by_id_with_base_data(context, rule_id) -> Response:
     """ Send a delete request by Rule ID. 

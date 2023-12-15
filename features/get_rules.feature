@@ -19,12 +19,12 @@ Scenario: Get all onboarded countries with unauthenticated NBTLS. Should lead to
 Scenario: Download Rules of all Countries.
     When the DCC TLS certificate of country A is used
     And the path "/countrylist" is queried
-    And download rules of all countries with country A
+    And the rules of country A are downloaded
     And the response should be OK
     Then the response status code should be 200
 
 Scenario: Get Rules from any country with an unauthenticated NBTLS. Should lead to an error.
     When the DCC TLS certificate of country C is used
     And the path "/countrylist" is queried
-    And download rules of all countries with country C
+    And the rules of country C are downloaded
     Then the response status code should be 4xx

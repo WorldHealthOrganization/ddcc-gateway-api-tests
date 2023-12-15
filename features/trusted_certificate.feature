@@ -75,7 +75,7 @@ Scenario: By default, the KID is derived from the first 8 bytes of the  SHA-256 
 
     When the path "/trustList" is queried
     Then the created cert is found in the trust list
-    And the created cert has ...
+    And the re-downloaded cert's KID is the first 8 bytes of the thumbprint
 
 Scenario: Country B CANNOT upload DSCs created by Country A
     Given the default certificate is used

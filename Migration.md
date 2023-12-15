@@ -20,11 +20,11 @@ Python implementation of Gherkin/Cucumber.
 | `gateway/security.md`  | Migrated to `security.feature` |
 | `gateway/reference.md`| |
 | `gateway/certificates.md`| |
-| `eugateway/rules/UpdateRules.md`|
+| `eugateway/rules/UpdateRules.md`| Migrated to `update_rules.feature` |
 | `eugateway/rules/GetRules.md` | Migrated to `get_rules.feature` |
-| `eugateway/rules/UploadRules.md`|  |
-| `eugateway/rules/DeleteRule.md`|     |
-| `eugateway/valuesets/GetValueset.md`|
+| `eugateway/rules/UploadRules.md`| Migrated to `upload_rules.feature` |
+| `eugateway/rules/DeleteRule.md`| |
+| `eugateway/valuesets/GetValueset.md`| Migrated to `valuesets.feature` |
 | `eugateway/rules_content_checks/ContentChecks.md`|   | 
 | `eugateway/rules_content_checks/ContentChecksInvalidationRules.md`|   |
 | `eugateway/rules_content_checks/ContentChecksAcceptanceRules.md`|   | 

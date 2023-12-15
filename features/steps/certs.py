@@ -71,10 +71,14 @@ def step_impl(context):
             .not_valid_after(datetime.utcnow() + timedelta(days=1))\
             .sign(signing_key, hashes.SHA256())    
 
+@step("the created {itemtype} is wrapped in a CMS message with extra data")
+def step_impl(context, itemtype):
+    return build_cms(context, itemtype, extra_data=b"foobar123")
+
 @step('the created {itemtype} is wrapped in a CMS message')
 # Requires cert attribute set by
 # 'the {domain} {ctype} certificate of {country_code} is used'
-def step_impl(context, itemtype):
+def build_cms(context, itemtype, extra_data=b""):
     if itemtype.lower() in ['cert', 'certificate']:
         data = context.created_cert.public_bytes(serialization.Encoding.DER)
     elif itemtype.lower() == 'rule': 
@@ -91,7 +95,7 @@ def step_impl(context, itemtype):
 
     options = [pkcs7.PKCS7Options.Binary]
 
-    builder = pkcs7.PKCS7SignatureBuilder().set_data(data)
+    builder = pkcs7.PKCS7SignatureBuilder().set_data(data + extra_data)
     cms_bytes = builder.add_signer(cms_cert, cms_key, hash_algorithm=hashes.SHA256()).sign(
         encoding=serialization.Encoding.DER, options=options)
 
@@ -128,3 +132,22 @@ def step_impl(context):
     
     context.trust_anchor_public_key = serialization.load_pem_public_key(
         bytes(f"-----BEGIN PUBLIC KEY-----\n{context.testenv.get('trust_anchor')}\n-----END PUBLIC KEY-----",'utf-8'))
+
+@step("the re-downloaded cert's KID is the first {bytecount} bytes of the thumbprint")
+def step_impl(context, bytecount):
+    created_cert = context.created_cert.public_bytes(serialization.Encoding.DER)
+    created_cert_b64 = b64encode(created_cert)
+    created_cert_b64 = str(created_cert_b64,'utf-8') 
+    created_cert_hash = b64encode(sha256(created_cert).digest()[:int(bytecount)])
+    created_cert_hash = str(created_cert_hash, 'utf-8')
+
+
+    trust_list = context.response.json()
+    for cert_info in trust_list:
+        # EU trust list uses 'rawData' key, WHO trust list uses 'certificate' key
+        if cert_info.get('rawData') == created_cert_b64 \
+        or cert_info.get('certificate') == created_cert_b64:
+            assert cert_info.get('kid') == created_cert_hash, f'KID is not the first {bytecount} bytes of the thumbprint'
+            return True
+        
+    assert False, 'Created cert not found in trust list'

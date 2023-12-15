@@ -2,7 +2,6 @@ Feature: UPDATE RULES
 
 Tests to update rules
 
-@done
 Scenario: Update a Rule created to a new version.
     When create a valid Invalidation Rule for country A
     And the DCC UP certificate of country A is used
@@ -22,7 +21,6 @@ Scenario: Update a Rule created to a new version.
     When the rules of country A are downloaded
     Then the re-downloaded rule exists in version 1.0.1
 
-@done
 Scenario: Two versions of a rule
           Update a Rule created to a new version and ValidFrom value 
           later than old rule. In the end both Versions of the rule 
@@ -48,7 +46,6 @@ Scenario: Two versions of a rule
     Then the re-downloaded rule exists in version 1.0.0
     Then the re-downloaded rule exists in version 1.0.1
 
-@done
 Scenario: Update a Rule with a Rule lower than the current version. There should be an error.
     When create a valid Invalidation Rule for country A
     And the DCC UP certificate of country A is used
@@ -64,8 +61,6 @@ Scenario: Update a Rule with a Rule lower than the current version. There should
     And the rule CMS is uploaded
     Then the response status code should be 400
 
-
-@done
 Scenario: Update a Rule without following the semantic versioning scheme (e.g. 1.3 instead of 1.3.0)
     When create a valid Invalidation Rule for country A
     And the Version of the rule is changed to 1.3
@@ -75,8 +70,6 @@ Scenario: Update a Rule without following the semantic versioning scheme (e.g. 1
     And the rule CMS is uploaded
     Then the response status code should be 400
     
-
-@done
 Scenario: After a rule is updated and valid the old rule should not be in the downloaded list
     When create a valid Invalidation Rule for country A
     And the rule becomes valid 1 seconds in the future
