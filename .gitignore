@@ -26,3 +26,7 @@ environment.*
 # data files
 t*.json
 
+# IntelliyJ IDEA
+.idea
+# Visual Studio Code
+.vscode
