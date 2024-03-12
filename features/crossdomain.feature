@@ -24,4 +24,5 @@ Scenario Outline: Use one domain for signing and upload, another in payload
 Examples:
     | source_domain | target_domain |
     |  DCC          |   ICAO        | 
-    |  DCC          |  RACSEL-DDVC  | 
+    |  DCC          |  RACSEL-DDVC  |
+    |  DCC          |   IPS         |
