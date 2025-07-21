@@ -22,7 +22,7 @@ Scenario Outline: Use one domain for signing and upload, another in payload
     Then the created cert is found in the trust list
 
 Examples:
-    | source_domain | target_domain |
-    |  DCC          |   ICAO        | 
-    |  DCC          |  RACSEL-DDVC  |
-    |  DCC          |   IPS         |
+    | source_domain | target_domain  |
+    |  DCC          |   DICVP        |
+    |  DCC          |  PH4H          |
+    |  DCC          | IPS-PILGRIMAGE |
