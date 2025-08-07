@@ -1,7 +1,7 @@
 Feature: DSC
 
-This feature describes the DSC interface which is compatible
-with the EU trusted gateway.
+This feature describes the DSC interface for uploading, downloading,
+DSCs to TNG.
 
 A DSC is a certificate, which a member state uses to sign documents.
 As a participant in the smart trust network, I want to manage my DSCs:

@@ -103,7 +103,7 @@ Scenario: A country cannot sideload TLS certificates
     Then the response status code should be 4xx
 
 @wip
-Scenario Outline: Other certificate types than DCC are not visible in the EU trust list
+Scenario Outline: Other certificate types than DCC are not visible in the TNG trust list
     Given the default certificate is used
     And the DCC UP certificate of country A is used
     And the created cert is wrapped in a CMS message
