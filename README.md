@@ -1,6 +1,5 @@
-<h1 align="center">
-   Trusted Network Gateway  API Tests
-</h1>
+
+#   Trusted Network Gateway  API Tests
 
 ## General info and requirements
 
@@ -9,29 +8,41 @@ Tests are written in _Gherkin_, a human-readable, behavior focussed syntax.
 
 :exclamation: It is intended to be used mainly for development and regression testing on the [SMART Trustnetwork Gateway](https://github.com/WorldHealthOrganization/smart-trust-network-gateway).
 
-The environments to test against are configured in [teststing_environments](./features/testing_environments.json) and point to the WHO TNG instances. For using this test suite for your own purposes, the environment has to be changed to your personal needs.
+The environments to test against are configured in [teststing_environments](./features/testing_environments.json) and point to the WHO TNG instances.  
+For using this test suite for your own purposes, the environment has to be changed to your personal needs.
 
-Requirements:
+### Prerequisites:
+- Python 3.9 or later installed
+- pip (Python package installer)
+- 
+#### Installation instructions:
 
-- Python 3.9 or later
+- Clone this repository
+  - on the commandline in the repository:  
+    optionally create a virtual environemnt, venv  
+    ```bash 
+    python -m venv .venv --prompt TNG-Tests 
+    source .venv/bin/activate
+    ```
+- install the required packages:  
+    ```bash
+  python -m pip install -r requirements.txt
+    ```
+Depending on whether you run this command within your created virtual environment or not, behave will be available only
+within the virtual environment or globally on your system.
+Installing the required packages will take some time, it may be, that some of the packages are already installed on
+your system, ignore according messages though.
 
-Installation instructions:
-
-- Install Python
-- Clone the repository
-- In the repository:
-
-```
-# Optional: Create venv
-# python -m venv .venv --prompt TNG-Tests
-# source .venv/bin/activate
-
-python -m pip install -r requirements.txt
-```
-
-Be sure to provide complete key material (TLS, Upload, SCA) for the 'virtual' test countries **XXA, XXB, XXC**
-under the [certificates](./certificates) folder before testing. You can generate those with the scripts that can be found in [the tng-participant-template](https://github.com/WorldHealthOrganization/tng-participant-template).
-As TLS certificates need to be whitelisted on the TNG only onboarded participants could use the test-suite with the preconfigured environment - but we kindly ask you not to do so.
+- copy the key material for XXA and XXB in the appropriate folders under `certificates/`  
+   
+ 
+  The key material is not provided in this repository, as it is confidential.  
+  For testing purposes you can generate the key material with the scripts that can be found in 
+  [the tng-participant-template]((https://github.com/WorldHealthOrganization/tng-participant-template) and run it 
+  on your personal copy of TNG.
+Be sure to provide complete key material (TLS, Upload, SCA) for the 'virtual' test countries **XXA and XXB
+As TLS certificates need to be whitelisted on the TNG onboarded participants could use the test-suite with the 
+  preconfigured environments - but we kindly ask you not to do so.
 
 ## Usage
 

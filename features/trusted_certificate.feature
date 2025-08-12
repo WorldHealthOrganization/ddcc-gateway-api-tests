@@ -35,7 +35,7 @@ Scenario: Only DSCs of domain DCC appear in the EU trust list
         And the CMS is wrapped in a JSON object
         And the JSON kid attribute is set to ABCDEFGH
         And the JSON group attribute is set to DSC
-        And the JSON domain attribute is set to ICAO
+        And the JSON domain attribute is set to IPS-PILGRIMAGE
     And the DCC TLS certificate of country A is used
     And the JSON is uploaded via the trustedCertificate API
     And the response should be OK
@@ -103,7 +103,7 @@ Scenario: A country cannot sideload TLS certificates
     Then the response status code should be 4xx
 
 @wip
-Scenario Outline: Other certificate types than DCC are not visible in the EU trust list
+Scenario Outline: Other certificate types than DCC are not visible in the TNG trust list
     Given the default certificate is used
     And the DCC UP certificate of country A is used
     And the created cert is wrapped in a CMS message

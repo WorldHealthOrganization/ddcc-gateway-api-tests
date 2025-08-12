@@ -4,3 +4,4 @@ cryptography
 asn1crypto
 pyopenssl
 pycountry
+behave-html-formatter
