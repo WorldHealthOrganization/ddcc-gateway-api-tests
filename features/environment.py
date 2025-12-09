@@ -20,6 +20,7 @@ def before_all(context):
     testenv = ucase_json.get(cfg.userdata.get('testenv').upper())
     context.base_url = testenv.get('base_url')
     context.testenv = testenv
+    context.repo_url = testenv.get('repo_url')
 
     
     # Patch testing countries into pycountry: 

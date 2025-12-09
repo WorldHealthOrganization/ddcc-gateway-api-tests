@@ -3,19 +3,22 @@
         "base_url" : "https://tng-uat.who.int",
         "country_A" : "XXA",
         "country_B" : "XXB",
-        "country_C" : "XXC"
+        "country_C" : "XXC",
+        "repo_url": "https://github.com/WorldHealthOrganization/tng-cdn-uat/blob/master/"
     },
     "UAT-reverse": {
         "base_url" : "https://tng-uat.who.int",
         "country_A" : "XXB",
         "country_B" : "XXA",
-        "country_C" : "XXC"
+        "country_C" : "XXC",
+        "repo_url": "https://github.com/WorldHealthOrganization/tng-cdn-uat/blob/master/"
     },
     "DEV": {
         "base_url" : "https://tng-dev.who.int",
         "country_A" : "XXA",
         "country_B" : "XXB",
-        "country_C" : "XXC"
+        "country_C" : "XXC",
+        "repo_url": "https://github.com/WorldHealthOrganization/tng-cdn-dev/blob/main/"
     },
     "EXAMPLE": {
         "base_url" : "https://example-environment.service.tld",
